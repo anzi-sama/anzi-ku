@@ -1,0 +1,1248 @@
+package com.guat.dao;
+
+import java.sql.Connection;
+
+
+
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+
+import java.util.Random;
+
+import java.util.List;
+
+import com.guat.bean.Culture;
+import com.guat.bean.Datamanager;
+import com.guat.bean.Medical;
+import com.guat.bean.Province;
+import com.guat.bean.Religion;
+import com.guat.bean.Rule;
+import com.guat.bean.Testtype;
+import com.guat.bean.User;
+import com.guat.bean.Warm;
+import com.guat.util.DBUtil;
+
+
+
+
+public class UserDao {
+	private static UserDao userDao;
+
+	private UserDao() {}
+	
+	public static UserDao getInstance() {
+		if(userDao==null) {
+			userDao=new UserDao();
+		}
+		return userDao;
+	}
+public static void main(String[] args) {
+	/*
+	UserDao userDao=new UserDao();
+	User user=new User(null, "1", "1", null, "1", "1", null, "1", null, 1, null,
+			null, "1", "1", "1", "1");
+	userDao.insertUser(user);
+	*/
+}
+/**
+ * 用于插入成千上万条数据
+ * @param user
+ * @return
+ */
+public User insertUserInfinity(User user) {
+	Connection conn=null;
+	PreparedStatement stat=null;
+	
+	
+	
+	try {
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "scott", "123456");
+
+		stat=conn.prepareStatement("insert into LOL_USER(ID,USERNAME,PASSWORD,RULE,"
+				+ "REALNAME,SEX,REGISTERTIME,STATUS,PID,AGE,CULTUREID,"
+				+ "RELIGIONID,ADDRESS,PHONE,EMAIL,CONTENT) "
+				+ "values(USER_SEQ.nextval,?,?,?,?,?,sysdate,?,?,?,?,?,?,?,?,?)");
+		stat.setString(1, user.getUsername());
+		stat.setString(2, user.getPassword());
+		stat.setInt(3, user.getRule().getId());
+		stat.setString(4, user.getRealname());
+		stat.setString(5, user.getSex());
+		stat.setString(6, user.getStatus());
+		stat.setInt(7, user.getPid().getId());
+		stat.setInt(8, user.getAge());
+		stat.setInt(9, user.getCulture().getId());
+		stat.setInt(10, user.getReligion().getId());
+		stat.setString(11, user.getAddress());
+		stat.setString(12, user.getPhone());
+		stat.setString(13, user.getEmail());
+		stat.setString(14, user.getContent());
+	
+		int n=stat.executeUpdate();
+		if(n>0) {
+			System.out.println("插入成功");
+		}
+		return user;
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	return null;
+	
+}
+
+/**
+ * 用户注册插入
+ * @param user
+ * @return
+ */
+	public User insertUser(User user) {
+		Connection conn=null;
+		PreparedStatement stat=null;
+		
+		
+		conn=DBUtil.getConnection();
+		try {
+			stat=conn.prepareStatement("insert into LOL_USER(ID,USERNAME,PASSWORD,RULE,"
+					+ "REALNAME,SEX,REGISTERTIME,STATUS,PID,AGE,CULTUREID,"
+					+ "RELIGIONID,ADDRESS,PHONE,EMAIL,CONTENT) "
+					+ "values(USER_SEQ.nextval,?,?,3,?,?,sysdate,1,?,?,?,?,?,?,?,?)");
+			stat.setString(1, user.getUsername());
+			stat.setString(2, user.getPassword());
+			stat.setString(3, user.getRealname());
+			stat.setString(4, user.getSex());
+			stat.setString(5, user.getPid().getProvinceId());
+			
+			stat.setInt(6, user.getAge());
+			stat.setInt(7, user.getCulture().getId());
+			System.out.println("userdao:"+user.getReligion().getId());
+			stat.setInt(8, user.getReligion().getId());
+			
+			stat.setString(9, user.getAddress());
+			stat.setString(10, user.getPhone());
+			stat.setString(11, user.getEmail());
+			stat.setString(12, user.getContent());
+
+			int n=stat.executeUpdate();
+			if(n>0) {
+				System.out.println("插入成功");
+			}
+			return user;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+
+	/**
+	 * 登录：通过用户名和密码查询用户
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	
+	private static final String QUERY_USER= "select u.id uids,\r\n" + 
+			"       u.username,\r\n" + 
+			"       u.password,\r\n" + 
+			"       u.realname,\r\n" + 
+			"       u.sex,\r\n" + 
+			"       u.registertime,\r\n" + 
+			"       u.status,\r\n" + 
+			"       u.age,\r\n" + 
+			"       u.address,\r\n" + 
+			"       u.phone,\r\n" + 
+			"       u.email,\r\n" + 
+			"      \r\n" + 
+			"       u.content,\r\n" + 
+			"       u.imagepath,\r\n" + 
+			"       c.id cid, c.content ccontent,\r\n" + 
+			"       r.id rid, r.content rcontent,\r\n" + 
+			"       ru.id ruid, ru.content rucontent,\r\n" + 
+			"       p.id pid,\r\n" + 
+			"       p.province\r\n" + 
+			"       \r\n" + 
+			"from lol_user u, lol_culture c, lol_religion r, lol_rule ru, tab_province p\r\n" + 
+			"where u.rule=ru.id and u.cultureid = c.id and u.religionid=r.id and u.pid = p.id\r\n" + 
+			"and username= ? and password= ?";
+	public User queryByUsernameAndPassword(String username, String password) {
+		// TODO Auto-generated method stub
+		User user = null;
+		Connection con = null;
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		try {
+			con=DBUtil.getConnection();
+			stat = con.prepareStatement(QUERY_USER);
+
+			stat.setString(1, username);
+			
+			stat.setString(2, password);
+			
+			rs = stat.executeQuery();
+
+			if (rs.next()) {
+				user = new User();
+				user.setId(rs.getInt("uids"));
+				user.setUsername(rs.getString("username"));
+				user.setPassword(rs.getString("password"));
+				user.setRealname(rs.getString("realname"));
+				user.setSex(rs.getString("sex"));
+				user.setRegisterTime(rs.getDate("registertime"));
+				user.setStatus(rs.getString("status"));
+				user.setAge(rs.getInt("age"));
+				user.setAddress(rs.getString("address"));
+				user.setPhone(rs.getString("phone"));
+				user.setEmail(rs.getString("email"));
+				
+				user.setContent(rs.getString("content"));
+				user.setImagepath(rs.getString("imagepath"));
+				
+				Culture c = new Culture();
+				c.setId(rs.getInt("cid"));
+				c.setContent(rs.getString("ccontent"));
+				user.setCulture(c);
+				
+				Religion r = new Religion();
+				r.setId(rs.getInt("rid"));
+				r.setContent(rs.getString("rcontent"));
+				user.setReligion(r);
+				
+				Rule ru = new Rule();
+				ru.setId(rs.getInt("ruid"));
+				ru.setContent(rs.getString("rucontent"));
+				user.setRule(ru);
+				
+				Province p = new Province();
+				p.setId(rs.getInt("pid"));
+				p.setProvinceName(rs.getString("province"));
+				user.setPid(p);
+
+			}
+
+		}  catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(con, stat, rs);
+		}
+		
+		return user;
+	}
+
+	public boolean queryUsername(String username) {
+		Connection con = null;
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		try {
+			con=DBUtil.getConnection();
+			stat=con.prepareStatement("select * from lol_user where username=?");
+			stat.setString(1, username);
+			rs=stat.executeQuery();
+			
+			if(rs.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DBUtil.close(con, stat, rs);
+		}
+		
+		
+		return false;
+	}
+	/**
+	 * 用户管理：ID查询
+	 * @param u
+	 * @return
+	 */
+	public User UserQueryId(User us) {
+		User user=new User();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs=null;
+		try {
+			conn=DBUtil.getConnection();
+			
+			StringBuffer sql=new StringBuffer("select u.id,username,password,rule,r.content,sex,registertime,u.rowid from lol_user u,lol_rule r where u.rule=r.id");
+			if(us.getId()!=null &&us.getId()!=0) {
+				sql.append(" and u.id='"+us.getId()+"'");
+			}		
+			if(us.getUsername()!=null&&!"".equals(us.getUsername())) {
+				sql.append(" and username='"+us.getUsername()+"'");
+			}
+		   if(us.getSex()!=null&&!"".equals(us.getSex())) {
+				sql.append(" and sex='"+us.getSex()+"'");
+			}
+		   System.out.println("sql联合查询语句："+sql.toString());
+			stmt=conn.prepareStatement(sql.toString());
+			
+			
+			
+			rs=stmt.executeQuery();
+			while(rs.next()) {
+				
+				user.setId(rs.getInt("id"));
+				user.setUsername(rs.getString("username"));
+				user.setPassword(rs.getString("password"));
+				Rule rule=new Rule();
+				rule.setId(rs.getInt("rule"));
+				rule.setContent(rs.getString("content"));
+				
+				user.setRule(rule);
+				user.setSex(rs.getString("sex"));
+				user.setRegisterTime(rs.getDate("registertime"));
+				
+				
+			}
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}finally
+			{
+				try {
+					rs.close();
+					stmt.close();
+					conn.close();
+				}catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+			return user;
+		
+		
+	}
+	
+	/**
+	 * 用户管理:查询
+	 * @param user
+	 * @return
+	 */
+	public List<User> QueryUser(User u){
+		List<User> list=new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs=null;
+		try {
+		conn=DBUtil.getConnection();
+		
+		StringBuffer sql=new StringBuffer("select u.id,username,password,rule,r.content,sex,registertime,u.rowid from lol_user u,lol_rule r where u.rule=r.id");
+		if(u.getId()!=null &&u.getId()!=0) {
+			sql.append(" and u.id='"+u.getId()+"'");
+		}		
+		if(u.getUsername()!=null&&!"".equals(u.getUsername())) {
+			sql.append(" and username='"+u.getUsername()+"'");
+		}
+	   if(u.getSex()!=null&&!"".equals(u.getSex())) {
+			sql.append(" and sex='"+u.getSex()+"'");
+		}
+	   System.out.println("sql联合查询语句："+sql.toString());
+		stmt=conn.prepareStatement(sql.toString());
+		
+		
+		
+		rs=stmt.executeQuery();
+		while(rs.next()) {
+			User user=new User();
+			user.setId(rs.getInt("id"));
+			user.setUsername(rs.getString("username"));
+			user.setPassword(rs.getString("password"));
+			Rule rule=new Rule();
+			rule.setId(rs.getInt("rule"));
+			rule.setContent(rs.getString("content"));
+			
+			user.setRule(rule);
+			user.setSex(rs.getString("sex"));
+			user.setRegisterTime(rs.getDate("registertime"));
+			list.add(user);
+			
+		}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}finally
+		{
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return list;
+	
+	
+	}
+	/**
+	 * 用户管理：编辑
+	 * @param id
+	 * @param sex
+	 * @param rule
+	 * @param content
+	 */
+	public void UserManageUpdete(Integer id,String sex,Integer rule,String content) {
+		//两大金刚
+ 		Connection con=null;
+ 		PreparedStatement stat=null;
+		//加载驱动
+ 		try {
+
+ 			con=DBUtil.getConnection();
+			//执行SQL语句
+			stat=con.prepareStatement("update lol_user set sex=?,rule=?,content=? where id=?");
+			//为占位符赋值
+			stat.setString(1, sex);
+	        stat.setInt(2,rule);
+            stat.setString(3,content);
+            stat.setInt(4, id);
+			//执行更新
+			stat.executeUpdate();
+		} 
+
+         catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				//关闭资源
+				stat.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+ 		
+	}
+	/**
+	 * 用户管理：更改密码
+	 * @param id
+	 * @param password
+	 */
+	public void UserUpdetePassword(Integer id,String password) {
+		Connection con=null;
+ 		PreparedStatement stat=null;
+ 		try {
+
+ 			con=DBUtil.getConnection();
+			//执行SQL语句
+			stat=con.prepareStatement("update lol_user set password=? where id=?");
+			//为占位符赋值
+			stat.setString(1, password);
+	       ;
+            stat.setInt(2, id);
+			//执行更新
+			stat.executeUpdate();
+		} 
+
+         catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				//关闭资源
+				stat.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	/**
+	 * 用户管理：添加
+	 * @param user
+	 */
+	public boolean UserManagerAdd(Integer id,String username,String password,String sex,Integer rule,String realname) {
+		Connection con=null;
+ 		PreparedStatement stat=null;
+ 		try {
+
+ 			con=DBUtil.getConnection();
+			//执行SQL语句
+			stat=con.prepareStatement("insert into lol_user(id,username,password,rule,sex,realname,REGISTERTIME, status,pid,age,cultureId, religionId,address,phone) values(USER_SEQ.nextval,?,?,?,?,?,sysdate,1,20,20,5,4,'广西',6523)");
+			//为占位符赋值
+//			 stat.setInt(1, id);
+			stat.setString(1, username);
+	      
+	       stat.setString(2, password);
+	       stat.setInt(3, rule);
+	       stat.setString(4, sex);
+	       stat.setString(5, realname);
+            
+			//执行更新
+			Integer i=stat.executeUpdate();
+			if(i>0) {
+				return true;
+			}
+		} 
+
+         catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}finally {
+			try {
+				//关闭资源
+				stat.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		return false;
+	}
+	
+
+	/**
+	 * 数据管理查询
+	 */
+	
+	public List<Datamanager> shujuguangliCondition(Datamanager dat)//realname sex  certtype usertype certcode
+	{
+		List<Datamanager> list=new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs=null;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "scott", "123456");		
+			StringBuffer sql=new StringBuffer("select dat.id did,u.username uname,t.id tid,dat.testdate dda,warm.id wid \r\n" + 
+					"from lol_datamanager dat,lol_testtype t,lol_warm warm,lol_user u \r\n" + 
+					"where dat.username=u.username and dat.testtype=t.id and dat.warmtype=warm.id"
+					);
+						
+			if(dat.getId()!=null&&!"".equals(dat.getId()))
+			{
+				sql.append(" and dat.id="+dat.getId());
+			}
+			if(dat.getUser().getUsername()!=null&&!"".equals(dat.getUser().getUsername()))
+			{
+				sql.append(" and dat.username='"+dat.getUser().getUsername()+"'");
+			}
+//			if(dat.getTestttpe().getId()!=null&&!"".equals(dat.getTestttpe().getId()))
+//			{
+//				sql.append(" and dat.testtype='"+dat.getTestttpe().getId()+"'");
+//			}
+			
+			stmt=conn.prepareStatement(sql.toString());
+//			System.out.println("-------------我是DAO层"+sql.toString());
+//			System.out.println("++++++++++++++++++++++"+stmt);
+//			//stmt.setString(1, u.getSex());
+//		stmt.setInt(1, u.getCt().getId());
+//		stmt.setInt(2, u.getUt().getId());
+//			
+			rs=stmt.executeQuery();
+		
+			while(rs.next())
+			{
+				//编号
+				Datamanager data=new Datamanager();
+				data.setId(rs.getInt("did"));
+				
+				//姓名
+				User user=new User();
+				user.setUsername(rs.getString("uname"));
+				//测试题型
+				Testtype  test=new Testtype();
+				test.setId(rs.getInt("tid"));
+				//测试时间
+				data.setTestdate(rs.getDate("dda"));
+				//处理状态
+				Warm warm=new Warm();
+				warm.setId(rs.getInt("wid"));
+				data.setUser(user);
+				data.setTesttype(test);
+
+				data.setWarm(warm);		
+				
+				list.add(data);
+			}
+			
+			
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}finally
+		{
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return list;
+	}
+	
+
+	/**
+	 * 档案管理：通过条件查询用户
+	 * @param user
+	 * @return
+	 */
+	public List<User> queryUserByCondition(User user) {
+		
+		List<User> list = new ArrayList<>();
+		Connection con = null;
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		
+		try {
+			
+			con = DBUtil.getConnection();
+			
+			StringBuffer sql = new StringBuffer("select u.id, u.realname, u.sex, p.id pid, p.province, u.age, c.id cid, c.content ccontent, r.id rid, r.content rcontent,\r\n" + 
+					"u.phone\r\n" + 
+					"from lol_user u, tab_province p, lol_culture c, lol_religion r\r\n" + 
+					"where u.pid = p.id and u.cultureid = c.id and u.religionid = r.id\r\n" + 
+					"and 1=1 ");
+			
+			if(user.getRealname() != null && !"".equals(user.getRealname())) {
+				sql.append(" and realname like '%"+ user.getRealname().trim()+"%'");
+			}
+			
+			if(user.getSex() != null && !"0".equals(user.getSex())) {
+				sql.append(" and sex = '"+ user.getSex()+"'");
+			}
+			
+			if(user.getPid().getId() !=null && user.getPid().getId()!=0) {
+				sql.append(" and pid = "+ user.getPid().getId());
+			}
+			
+			if(user.getAge() !=null && user.getAge()!=0) {
+				sql.append(" and age = "+user.getAge());
+			}
+			
+			if(user.getCulture().getId() !=null && user.getCulture().getId()!=0) {
+				sql.append(" and c.id = "+user.getCulture().getId());
+			}
+			
+			if(user.getReligion().getId() !=null && user.getReligion().getId()!=0) {
+				sql.append(" and r.id = "+user.getReligion().getId());
+			}
+			System.out.println("sql联合查询语句："+sql.toString());
+			stat = con.prepareStatement(sql.toString());
+			
+			rs = stat.executeQuery();
+			
+			while (rs.next()) {
+				User user1 = new User();
+				Culture c = new Culture();
+				Religion r = new Religion();
+				Province p = new Province();
+				
+				user1.setId(rs.getInt("id"));
+				user1.setRealname(rs.getString("realname"));
+				user1.setSex(rs.getString("sex"));
+				user1.setAge(rs.getInt("age"));
+				user1.setPhone(rs.getString("phone"));
+				
+				
+				p.setId(rs.getInt("pid"));
+				p.setProvinceName(rs.getString("province"));
+				
+				c.setId(rs.getInt("cid"));
+				c.setContent(rs.getString("ccontent"));
+				
+				r.setId(rs.getInt("rid"));
+				r.setContent(rs.getString("rcontent"));
+				
+				user1.setPid(p);
+				user1.setCulture(c);
+				user1.setReligion(r);
+			
+				list.add(user1);
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(con, stat, rs);
+			
+		}
+		return list;
+	}
+	/**
+	 * 数据管理批量删除(根据id删除)
+	 */
+	public void shujuplsc(Integer[] datids) {
+		//111111111111
+		Connection con=null;
+		PreparedStatement stat=null;
+		try {
+//			Class.forName("oracle.jdbc.driver.OracleDriver");
+//			con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "scott", "123456");
+			con=DBUtil.getConnection();
+			StringBuffer sb=new StringBuffer("delete from lol_datamanager ");
+			if(datids.length>0) {
+				sb.append("where id in (");
+				for (Integer i : datids) {
+					//追加条件,加逗号
+					sb.append(i+",");
+				}
+			}
+			System.out.println("sb:"+sb.toString());
+			//把逗号减掉
+			String sql_result=sb.substring(0, sb.toString().length()-1)+")";
+			System.out.println("sql_result:"+sql_result);
+			
+			stat = con.prepareStatement(sql_result);
+			
+			stat.executeUpdate();
+
+
+		} catch (Exception e) {
+		e.printStackTrace();
+		}finally {
+			try {
+				stat.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		}
+		
+	}
+	
+	
+	/**
+	 * 用户管理:批量删除
+	 * @param userid
+	 */
+	public boolean deleteUser(Integer[] userid) {
+		Connection con=null;
+		PreparedStatement stat=null;
+		try {
+//			Class.forName("oracle.jdbc.driver.OracleDriver");
+//			con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "scott", "123456");
+			con=DBUtil.getConnection();
+			StringBuffer sb=new StringBuffer("delete from lol_user ");
+			if(userid.length>0) {
+				sb.append("where id in (");
+				for (Integer i : userid) {
+					//追加条件,加逗号
+					sb.append(i+",");
+				}
+			}
+			System.out.println("sb:"+sb.toString());
+			//把逗号减掉
+			String sql_result=sb.substring(0, sb.toString().length()-1)+")";
+			System.out.println("sql_result:"+sql_result);
+			
+			stat = con.prepareStatement(sql_result);
+			Integer status = stat.executeUpdate();
+			if(status>0) {
+				return true;
+			}
+
+
+		} catch (Exception e) {
+		e.printStackTrace();
+		   return false;
+		}finally {
+			try {
+				stat.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		}
+		return false;
+	}
+/**
+ * 数据管理：根据id查询用户
+ */
+	public Datamanager shujuxg(Integer datid) {
+		Datamanager dat=null;
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			
+			con = DBUtil.getConnection();
+			stmt = con.prepareStatement("select dat.id did,u.username uname,t.id tid,dat.testdate dda,warm.id wid \r\n" + 
+					"from lol_datamanager dat,lol_testtype t,lol_warm warm,lol_user u \r\n" + 
+					"where dat.username=u.username and dat.testtype=t.id and dat.warmtype=warm.id" + 
+					" and dat.id = ?");
+
+			stmt.setInt(1, datid);
+			
+			System.out.println("-------------我是DAO层"+stmt.toString());
+//			System.out.println("++++++++++++++++++++++"+stmt);
+//			//stmt.setString(1, u.getSex());
+//		stmt.setInt(1, u.getCt().getId());
+//		stmt.setInt(2, u.getUt().getId());
+//			
+			rs=stmt.executeQuery();
+
+		
+			System.out.println("-------------我是DAO层");
+			if (rs.next()) {
+				//把值写进实体类
+				dat = new Datamanager();
+				dat.setId(rs.getInt("did"));
+				
+				//姓名
+				User user=new User();
+				user.setUsername(rs.getString("uname"));
+				//测试题型
+				Testtype  test=new Testtype();
+				test.setId(rs.getInt("tid"));
+				//测试时间
+				dat.setTestdate(rs.getDate("dda"));
+				//处理状态
+				Warm warm=new Warm();
+				warm.setId(rs.getInt("wid"));
+				dat.setUser(user);
+				dat.setTesttype(test);
+
+				dat.setWarm(warm);
+			}
+			
+		}  catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(con, stmt, rs);
+		}
+		
+	return dat;
+		
+	}
+	
+	/**
+	 * 档案管理：通过uid查询用户
+	 * @return
+	 */
+	public User selectUserByUid(Integer uid) {
+		// TODO Auto-generated method stub
+				User user = null;
+
+				Connection con = null;
+				PreparedStatement stat = null;
+				ResultSet rs = null;
+				try {
+					
+					con = DBUtil.getConnection();
+					stat = con.prepareStatement("select u.id, u.username, u.realname, u.sex, p.id pid, p.province, u.age, c.id cid, c.content ccontent, r.id rid, r.content rcontent,\r\n" + 
+							"u.phone\r\n" + 
+							"from lol_user u, tab_province p, lol_culture c, lol_religion r\r\n" + 
+							"where u.pid = p.id and u.cultureid = c.id and u.religionid = r.id\r\n" + 
+							"and u.id = ?");
+
+					stat.setInt(1, uid);
+					
+					rs = stat.executeQuery();
+
+					if (rs.next()) {
+						user = new User();
+						
+						user.setId(rs.getInt("id"));
+						user.setUsername(rs.getString("username"));
+						user.setRealname(rs.getString("realname"));
+						user.setSex(rs.getString("sex"));
+						user.setAge(rs.getInt("age"));
+						user.setPhone(rs.getString("phone"));
+						
+						
+						Province p = new Province();
+						p.setId(rs.getInt("pid"));
+						p.setProvinceName(rs.getString("province"));
+						user.setPid(p);
+						
+						Culture c = new Culture();
+						c.setId(rs.getInt("cid"));
+						c.setContent(rs.getString("ccontent"));
+						user.setCulture(c);
+						
+						Religion r = new Religion();
+						r.setId(rs.getInt("rid"));
+						r.setContent(rs.getString("rcontent"));
+						user.setReligion(r);
+					}
+					
+				}  catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} finally {
+					DBUtil.close(con, stat, rs);
+				}
+				
+				return user;
+	}
+	
+	
+/**
+ * 数据管理:数据修改
+ */
+	public boolean shujuxg_one(Datamanager data) {
+		Connection con = null;
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		try {
+			System.out.println("data.getUser().getUsername()="+data.getUser().getUsername());
+			 System.out.println("+这是data.getTestttpe().getId()="+data.getTesttype().getId());
+			 System.out.println("data.getWarm().getId()="+data.getWarm().getId());
+			 System.out.println("data.getId()="+data.getId());
+			con = DBUtil.getConnection();
+			stat = con.prepareStatement("update lol_datamanager set username=?,testtype=?,warmtype=? where id=?");
+
+			stat.setString(1, data.getUser().getUsername());
+			stat.setInt(2, data.getTesttype().getId());
+			stat.setInt(3, data.getWarm().getId());
+			stat.setInt(4, data.getId());
+
+			if(stat.executeUpdate()>0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(con, stat, rs);
+		}
+		
+		return false;
+	}
+	/**
+	 * 档案管理：更改用户信息
+	 * @param user
+	 * @return
+	 */
+	public boolean updateUserDangan(User user) {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		try {
+			
+			con = DBUtil.getConnection();
+			stat = con.prepareStatement("update lol_user set realname = ?, sex = ?, pid = ?,"
+					+ "  age = ?, cultureid = ?, religionid = ?, phone = ?\r\n" + 
+					" where id = ?");
+
+			stat.setString(1, user.getRealname());
+			stat.setString(2, user.getSex());
+			stat.setInt(3, user.getPid().getId());
+			stat.setInt(4, user.getAge());
+			stat.setInt(5, user.getCulture().getId());
+			stat.setInt(6, user.getReligion().getId());
+			stat.setString(7, user.getPhone());
+			stat.setInt(8, user.getId());
+			
+			if(stat.executeUpdate()>0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(con, stat, rs);
+		}
+		
+		return false;
+		
+		
+	}
+	
+
+	/**
+	 * 档案管理：获取自动创建用户的seq
+	 * @return
+	 */
+	public Integer getAutoCreateSeq() {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		try {
+			
+			con = DBUtil.getConnection();
+			stat = con.prepareStatement("select auto_create_seq.nextval\r\n" + 
+					"from dual");
+
+			rs = stat.executeQuery();
+			Integer seq = null;
+			if(rs.next()) {
+				seq = rs.getInt("nextval");
+			}
+			return seq;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(con, stat, rs);
+		}
+		
+		return 0;
+		
+	}
+	
+	/**
+	 * 档案管理：添加病人用户
+	 * @return
+	 */
+	public boolean addDanganUser(User user) {
+		// TODO Auto-generated method stub
+		Connection conn=null;
+		PreparedStatement stat=null;
+		ResultSet rs = null;
+		try {
+			conn = DBUtil.getConnection();
+			
+			stat=conn.prepareStatement("insert into lol_user(id,username,password,rule,realname,sex,registertime,"
+					+ "status,pid,age,cultureid,\r\n" + 
+					" religionid,address,phone) "
+					+ "values(USER_SEQ.nextval,?,'123456',3,?,?,sysdate,1,?,?,?,?,?,?)");
+			stat.setString(1, user.getUsername());
+			stat.setString(2, user.getRealname());
+			stat.setString(3, user.getSex());
+			stat.setInt(4, user.getPid().getId());
+			stat.setInt(5, user.getAge());
+			stat.setInt(6, user.getCulture().getId());
+			stat.setInt(7, user.getReligion().getId());
+			stat.setString(8, user.getAddress());
+			stat.setString(9, user.getPhone());
+			
+			if(stat.executeUpdate()>0) {
+				return true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(conn, stat, rs);
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * 用户： 插入诊断报告
+	 * @param medical
+	 * @return
+	 */
+	public boolean insertInfo(Medical medical) {
+		// TODO Auto-generated method stub
+		Connection conn=null;
+		PreparedStatement stat=null;
+		ResultSet rs = null;
+		try {
+			conn = DBUtil.getConnection();
+			
+			stat=conn.prepareStatement("insert into lol_medical(ID,USERNAME,HYPERSENSITIVITY,HYPERSENSITIVITYSTATUS,HALLUCINATION,HALLUCINATIONSTATUS,RUNNING_THOUGHT,RUNNING_THOUGHTSTATUS,DELAYED_THINKING,DELAYED_THINKINGSTATUS,HIGH_SPIRITS,HIGH_SPIRITSSTATUS,IRRITABLE,IRRITABLESTATUS,ENHANCED_WILL,ENHANCED_WILLSTATUS,SELF_INJURY,SELF_INJURYSTATUS,MENTAL_RETARDATION,MENTAL_RETARDATIONSTATUS,DIET,DIETSTATUS,SLEEP,SLEEPSTATUS,IMPOTENCE,IMPOTENCESTATUS,SEXUAL_ORIENTATION,SEXUAL_ORIENTATIONSTATUS,PERSONALITY_DISORDER,PERSONALITY_DISORDERSTATUS,HYPOSEXUALITY,HYPOSEXUALITYSTATUS,TESTTIME,TESTTYPE)\r\n" + 
+					"values(MEDICAL_SEQ.NEXTVAL,? ,'感觉过敏',?,'幻觉',?,'思维奔逸',?,'思维迟缓',?,'情绪高涨',?,'易激怒',?,'意志增强',?,\r\n" + 
+					"'自伤',?,'精神发育迟缓',?,'饮食',?,'睡眠',?,'阳痿',?,'性指向',?,'人格障碍',?,'性欲减退',?,sysdate,?)");
+			
+			stat.setString(1, medical.getUsername());
+			stat.setString(2, medical.getHypersensitivitystatus());
+			stat.setString(3, medical.getHallucinationstatus());
+			stat.setString(4, medical.getRunning_thoughtstatus());
+			stat.setString(5, medical.getDelayed_thinkingstatus());
+			stat.setString(6, medical.getHigh_spiritsstatus());
+			stat.setString(7, medical.getIrritablestatus());
+			stat.setString(8, medical.getEnhanced_willstatus());
+			stat.setString(9, medical.getSelf_injurystatus());
+			stat.setString(10, medical.getMental_retardationstatus());
+			stat.setString(11, medical.getDietstatus());
+			stat.setString(12, medical.getSleepstatus());
+			stat.setString(13, medical.getImpotencestatus());
+			stat.setString(14, medical.getSexual_orientationstatus());
+			stat.setString(15, medical.getPersonality_disorderstatus());
+			stat.setString(16, medical.getHyposexualitystatus());
+			stat.setInt(17, medical.getTesttype().getId());
+			if(stat.executeUpdate()>0) {
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(conn, stat, rs);
+		}
+		
+		return false;
+	}
+	
+	
+	/**
+	 * 医生：获取病人诊断报告
+	 * @param username
+	 * @return
+	 */
+	public Medical selectInfoByUsername(String username) {
+		// TODO Auto-generated method stub
+		
+		Connection con = null;
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		
+		try {
+			
+			con = DBUtil.getConnection();
+			stat = con.prepareStatement("select m.id,m.username,m.hypersensitivity,m.hypersensitivitystatus,m.hallucination,m.hallucinationstatus,m.running_thought,m.running_thoughtstatus,\r\n" + 
+					"m.delayed_thinking,m.delayed_thinkingstatus,m.high_spirits,m.high_spiritsstatus,m.irritable,m.irritablestatus,m.enhanced_will,m.enhanced_willstatus,\r\n" + 
+					"m.self_injury,m.self_injurystatus,m.mental_retardation,m.mental_retardationstatus,m.diet,m.dietstatus,m.sleep,m.sleepstatus,m.impotence,m.impotencestatus,\r\n" + 
+					"m.sexual_orientation,m.sexual_orientationstatus,m.personality_disorder,m.personality_disorderstatus,m.hyposexuality,m.hyposexualitystatus,\r\n" + 
+					"m.medical_info,m.testtime, t.id tid, t.content tcontent, w.id wid, w.content wcontent\r\n" + 
+					"from lol_medical m, lol_testtype t, lol_warm w\r\n" + 
+					"where m.testtype = t.id and m.warmtype = w.id\r\n" + 
+					"and username = ? ");
+			
+			stat.setString(1, username);
+			rs = stat.executeQuery();
+			Medical medical = null;
+			Warm w = null;
+			Testtype t = null;
+			if(rs.next()) {
+				medical = new Medical();
+				medical.setId(rs.getInt("id"));
+				medical.setUsername(rs.getString("username"));
+				medical.setHypersensitivity("感觉过敏");
+				medical.setHypersensitivitystatus(rs.getString("hyposexualitystatus"));
+				medical.setHallucination("幻觉");
+				medical.setHallucinationstatus(rs.getString("high_spiritsstatus"));
+				medical.setRunning_thought("思维奔逸");
+				medical.setRunning_thoughtstatus(rs.getString("running_thoughtstatus"));
+				medical.setDelayed_thinking("思维迟缓");
+				medical.setDelayed_thinkingstatus(rs.getString("delayed_thinkingstatus"));
+				medical.setHigh_spirits("情绪高涨");
+				medical.setHigh_spiritsstatus(rs.getString("high_spiritsstatus"));
+				medical.setIrritable("易激怒");
+				medical.setIrritablestatus(rs.getString("irritablestatus"));
+				medical.setEnhanced_will("意志增强");
+				medical.setEnhanced_willstatus(rs.getString("enhanced_willstatus"));
+				medical.setSelf_injury("自伤");
+				medical.setSelf_injurystatus(rs.getString("self_injurystatus"));
+				medical.setMental_retardation("精神发育迟缓");
+				medical.setMental_retardationstatus(rs.getString("mental_retardationstatus"));
+				medical.setDiet("饮食");
+				medical.setDietstatus(rs.getString("dietstatus"));
+				medical.setSleep("睡眠");
+				medical.setSleepstatus(rs.getString("sleepstatus"));
+				medical.setImpotence("阳痿");
+				medical.setImpotencestatus("impotencestatus");
+				medical.setSexual_orientation("性指向");
+				medical.setSexual_orientationstatus(rs.getString("sexual_orientationstatus"));
+				medical.setPersonality_disorder("人格障碍");
+				medical.setPersonality_disorderstatus(rs.getString("personality_disorderstatus"));
+				medical.setHyposexuality("性欲减退");
+				medical.setHyposexualitystatus(rs.getString("hyposexualitystatus"));
+				medical.setMedical_info(rs.getString("medical_info"));
+				medical.setTesttime(rs.getDate("testtime"));
+				w = new Warm();
+				w.setId(rs.getInt("wid"));
+				w.setContent(rs.getString("wcontent"));
+				t = new Testtype();
+				t.setId(rs.getInt("tid"));
+				t.setContent(rs.getString("tcontent"));
+				medical.setWarm(w);
+				medical.setTesttype(t);
+				
+			}
+			return medical;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(con, stat, rs);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 医生：插入医疗建议
+	 * @param message
+	 * @return
+	 */
+	public boolean insertMedicalInfo(String message,String warm,String username) {
+		// TODO Auto-generated method stub
+		
+		Connection conn=null;
+		PreparedStatement stat=null;
+		ResultSet rs = null;
+		try {
+			conn = DBUtil.getConnection();
+			
+			stat=conn.prepareStatement("update lol_medical \r\n" + 
+					"set medical_info = ? , warmtype = ? \r\n" + 
+					"where username = ? ");
+			
+			
+			stat.setString(1, message);
+			stat.setString(2, warm);
+			stat.setString(3, username);
+			if(stat.executeUpdate()>0) {
+				return true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(conn, stat, rs);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * 用户：  查询诊断记录是否存在
+	 * @param username
+	 * @return
+	 */
+	public boolean selectUserByUsername(String username) {
+		Connection conn=null;
+		PreparedStatement stat=null;
+		ResultSet rs = null;
+		try {
+			conn = DBUtil.getConnection();
+			
+			stat=conn.prepareStatement("select medical_info from lol_medical\r\n" + 
+					"where username = ?");
+			
+			
+			stat.setString(1, username);
+			
+			
+			
+			rs = stat.executeQuery();
+			
+			if(rs.next()) {
+				String result = rs.getString("medical_info");
+				if(result==null || "".equals(result)) {
+					return false;
+				}
+				
+				return true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(conn, stat, rs);
+		}
+		
+		return false;
+		
+	}
+	
+}

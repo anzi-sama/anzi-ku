@@ -1,0 +1,1713 @@
+package com.guat.controll;
+
+import java.io.File;
+import java.io.IOException;
+
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
+import java.util.Arrays;
+
+import java.util.Iterator;
+import java.util.List;
+
+import java.util.UUID;
+
+
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import com.alibaba.fastjson.JSON;
+import com.guat.bean.Culture;
+import com.guat.bean.Datamanager;
+import com.guat.bean.Module;
+import com.guat.bean.Province;
+import com.guat.bean.Religion;
+import com.guat.bean.Testtype;
+import com.guat.bean.User;
+import com.guat.bean.Warm;
+import com.guat.bean.WebInfoManage;
+import com.guat.service.ProvinceService;
+import com.guat.service.UserService;
+import com.guat.service.WebInfoManageService;
+import com.guat.util.PageUtil;
+
+@WebServlet("/UserServlet")
+public class UserServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		String operator = request.getParameter("operator");
+		System.out.println("operator:" + operator);
+		if ("toRegister".equals(operator)) {
+			toRegister(request, response);
+		} else if ("register".equals(operator)) {
+			register(request, response);
+		} else if ("login".equals(operator)) {
+			login(request, response);
+		} 
+		
+		   else if ("toDangan".equals(operator)) {
+			toDangan(request, response);
+		} else if ("danganQueryUserByCondition".equals(operator)) {
+			queryUserByCondition(request, response);
+		} else if ("toDanganPage".equals(operator)) {
+			toDanganPage(request, response);
+		} else if ("toDanganEdit".equals(operator)) {
+			toDanganEdit(request, response);
+		} else if ("danganEdit".equals(operator)) {
+			danganEdit(request, response);
+		} else if ("toDanganAdd".equals(operator)) {
+			toDanganAdd(request, response);
+		} else if("danganAdd".equals(operator)) {
+			danganAdd(request,response);
+		} else if("danganDelete".equals(operator)) {
+			danganDelete(request,response);
+		} else if ("toQueryUser".equals(operator)) {
+			toQueryUser(request, response);
+		} else if ("shujuguangli".equals(operator)) {
+			shujuguangli(request, response);
+		} else if ("QueryUser".equals(operator)) {
+			QueryUser(request, response);
+		} else if ("checkUsername".equals(operator)) {
+			checkUsername(request, response);
+		} else if ("toWebHome".equals(operator)) {
+			toWebHome(request, response);
+		} else if ("toWebAddHome".equals(operator)) {
+			toWebAddHome(request, response);
+		} else if ("deleteUsers".equals(operator)) {
+			deleteUsers(request, response);
+		} else if ("deleteUsersOne".equals(operator)) {
+			deleteUsersOne(request, response);
+		} else if ("addWebHome".equals(operator)) {
+			addWebHome(request, response);
+		} else if ("toManagement_edit".equals(operator)) {
+			toManagement_edit(request, response);
+		} else if ("webPageCurrent".equals(operator)) {
+			webPageCurrent(request, response);
+		} else if ("shujuplsc".equals(operator)) {
+			shujuplsc(request, response);
+		} else if ("webLoadPhoto".equals(operator)) {
+			webLoadPhoto(request, response);
+
+		}else if("toUserManagement_edit".equals(operator)) {
+			toUserManagement_edit(request,response);
+		}else if("UserManageUpdete".equals(operator)) {
+			UserManageUpdete(request,response);
+		}else if("webPageCurrent".equals(operator)) {
+			webPageCurrent(request,response);
+		}else if("shujuplsc".equals(operator)) {
+			shujuplsc(request,response);
+
+		}else if("shujuxg".equals(operator)) {
+			shujuxg(request,response);
+		}else if("ToUserUpdatePassWord".equals(operator)) {
+			ToUserUpdatePassWord(request,response);
+
+		}else if("toWebEditHome".equals(operator)) {
+			toWebEditHome(request,response);
+		}else if("webEdit".equals(operator)) {
+			webEdit(request,response);
+		}else if("WebDelete".equals(operator)) {
+			WebDelete(request,response);
+		}else if("WebDeletes".equals(operator)) {
+			WebDeletes(request,response);
+
+		}else if("shujuxg_one".equals(operator)) {
+			shujuxg_one(request,response);
+
+		}else if("UserUpdetePassword".equals(operator)) {
+			UserUpdetePassword(request,response);
+		}else if("toUserManagerAdd".equals(operator)) {
+			toUserManagerAdd(request,response);
+		}else if("UserManagerAdd".equals(operator)) {
+			UserManagerAdd(request,response);
+
+
+		}else if("queryWebContent".equals(operator)) {
+			queryWebContent(request,response);
+
+		}else if("toWebAbout".equals(operator)) {
+			toWebAbout(request,response);
+		}else if("webAboutPageCurrent".equals(operator)) {
+			webAboutPageCurrent(request,response);
+
+
+
+		}
+
+	}
+	/**
+	 * 网站信息管理关于我们的请求方法
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 * @throws ServletException 
+	 */
+		private void toWebAbout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+			// System.out.println("page_current:"+page_current);
+			// 请求进入首页的同时也把数据显示出来
+			// 1.先查询数据库信息
+			WebInfoManageService webService = WebInfoManageService.getInstance();
+			List<WebInfoManage> listWeb = webService.checkHome();
+
+			PageUtil p = new PageUtil(listWeb, 10, null);
+			request.setAttribute("page", p);
+			request.setAttribute("listWeb", p.getSubList());
+			request.setAttribute("pageCount", p.getPageCount());// 总页数
+			request.getRequestDispatcher("admin/about_us.jsp").forward(request, response);
+	}
+		/**
+		 * 网站信息管理首页查询
+		 * @param request
+		 * @param response
+		 */
+	private void queryWebContent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("into queryContent..............");
+		String content=request.getParameter("content");
+		System.out.println("content："+content);
+		WebInfoManageService webService=WebInfoManageService.getInstance();
+		List<WebInfoManage> list=webService.queryContent(content);
+		
+		PageUtil p = new PageUtil(list, 10, null);
+		request.setAttribute("page", p);
+		request.setAttribute("listWeb", p.getSubList());
+		request.setAttribute("pageCount", p.getPageCount());// 总页数
+		request.getRequestDispatcher("admin/home.jsp").forward(request, response);
+	}
+	/**
+	 * 网站信息管理首页      批量删除
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 * @throws ServletException 
+	 */
+	private void WebDeletes(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		String webId=request.getParameter("WebIds");
+		String [] webIds=webId.split(",");
+		System.out.println("webId:"+Arrays.toString(webIds));
+		System.out.println("webId:"+webIds.length);
+		if(webIds.length==0||"".equals(webIds[0])) {
+			response.setContentType("text/html;charset=utf-8");
+			response.getWriter().print("<script>alert('请勾选需要删除的数据')</script>");
+		}else {
+			WebInfoManageService webService=WebInfoManageService.getInstance();
+			webService.deleteWebs(webIds);
+			toWebHome(request, response);
+		}
+		
+		
+	}
+	/**
+	 * 网站信息管理首页    删除
+	 * @param request
+	 * @param response
+	 * @throws ServletException 
+	 */
+private void WebDelete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		System.out.println("into WebDelete.............");
+		String webId=request.getParameter("webId");
+		
+		WebInfoManageService webService=WebInfoManageService.getInstance();
+		boolean b=webService.deleteWeb(Integer.parseInt(webId));
+		if(b) {
+			toWebHome(request, response);
+		}
+	}
+/**
+ * 网站信息管理首页修改
+ * @param request
+ * @param response
+ * @throws IOException 
+ */
+private void webEdit(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	System.out.println("into webEdit。。。。。。。");
+		String webId=request.getParameter("webId");
+		String module=request.getParameter("module");
+		String title=request.getParameter("title");
+		String content=request.getParameter("content");
+		
+		Module mo=new Module(Integer.parseInt(module));
+		WebInfoManage web=new WebInfoManage(Integer.parseInt(webId), mo, title, null, content, null);
+		WebInfoManageService webService=WebInfoManageService.getInstance();
+		boolean b=webService.updataHome(web);
+		if(b) {
+			response.setContentType("text/html;charset=utf-8");
+			response.getWriter().print("<script>alert('更改成功');</script>");
+		}
+	}
+
+/**
+ * 网站信息管理首页修改
+ * @param request
+ * @param response
+
+<<<<<<< .mine
+ */
+	private void toWebEditHome(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("into toWebEditHome..........");
+		String webId=request.getParameter("webId");
+		request.setAttribute("webId", webId);
+		request.getRequestDispatcher("admin/home_edit.jsp").forward(request, response);
+	}
+
+
+
+	/**
+	 * 档案管理： 删除信息
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 * @throws ServletException 
+	 */
+	private void danganDelete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		// TODO Auto-generated method stub
+		System.out.println("档案管理，删除信息");
+		
+		String uid = request.getParameter("uid");
+		System.out.println(uid);
+		String [] uids = uid.split(",");
+		
+		if(UserService.getInstance().deleteUsers(uids)) {
+			response.sendRedirect(request.getContextPath()+"/admin/dangan.jsp");
+		} else {
+			request.setAttribute("mess", "删除失败");
+			request.getRequestDispatcher("/admin/dangan.jsp").forward(request, response);
+		}
+		
+		
+	}
+
+/**
+ * my数据管理：修改数据
+ * <p>Title: shujuxg_one</p>  
+ * <p>Description: </p>  
+ * @param request
+ * @param response
+ */
+	private void shujuxg_one(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("++++++++++my数据管理：修改数据");
+		//从页面获取数据
+		String id = request.getParameter("id");
+		String username = request.getParameter("username");
+		String testtype = request.getParameter("testtype");
+//		String testdate = request.getParameter("testdate");
+		String warmtype = request.getParameter("warmtype");
+
+		System.out.println("id=" + id);
+		System.out.println("username=" + username);
+		System.out.println("testtype=" + testtype);
+		System.out.println("warmtype=" + warmtype);
+		
+	//	把值写进实体类
+		//编号
+		Datamanager data=new Datamanager();
+		data.setId(Integer.parseInt(id));
+		
+		//姓名
+		User user=new User();
+		user.setUsername(username);
+		//测试题型
+		Testtype  test=new Testtype();
+		Integer testtype_one=1;
+		if("测试题".equals("testtype")) {
+			testtype_one=1;
+		}else if("综合测试题".equals("testtype")){
+			testtype_one=2;
+		}
+		test.setId(testtype_one);
+		test.setContent(testtype);
+		System.out.println("testtype_one="+testtype_one);
+		//测试时间
+//		data.setTestdate(rs.getDate("dda"));
+		//处理状态
+		Warm warm=new Warm();
+		Integer warm_one=null;
+		if("异常".equals(warmtype)) {
+			warm_one=0;
+		}
+		if("正常".equals(warmtype)) {
+			warm_one=1;
+		}		
+		warm.setId(warm_one);	
+		warm.setContent(warmtype);
+		
+		data.setUser(user);
+		data.setTesttype(test);
+		data.setWarm(warm);		
+ System.out.println("data类"+data.toString());
+		if (UserService.getInstance().shujuxg_one(data)) {
+			try {
+//				request.getRequestDispatcher("admin/dangan.jsp").forward(request, response);
+//					更新成功
+				
+				response.getWriter().println("<script>window.parent.location.href='admin/data_management.jsp'</script>");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				request.setAttribute("mess", "更新失败");
+				request.getRequestDispatcher("admin/data_management_look.jsp").forward(request, response);
+			} catch (ServletException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+
+
+	private void toManagement_edit(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	private void webLoadPhoto(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+		System.out.println("into webLoadPhoto....................");
+		
+		
+		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+		if (isMultipart) {
+			try {
+				//1.实例化缓冲区
+				DiskFileItemFactory factory = new DiskFileItemFactory();
+				//2.获取对文件操作的对象
+				ServletFileUpload upload = new ServletFileUpload(factory);
+				//设置上传数据时的默认字符集
+				upload.setHeaderEncoding("UTF-8");
+				//设置上传文件大小
+				upload.setSizeMax(10 * 1024 * 1024);
+
+				//获取所有表单项
+				List<FileItem> fileItems = upload.parseRequest(request);
+				System.out.println("有多少个表单项："+fileItems.size());
+				Iterator<FileItem> iter = fileItems.iterator();
+
+				// 依次处理每个表单域
+				while (iter.hasNext()) {
+					FileItem item = (FileItem) iter.next();
+
+					if (!item.isFormField()) {
+						// 如果item是上传文件
+						// 获得文件名及路径
+						String fileName = item.getName();
+
+						if (fileName != null && fileName.indexOf(".") != -1) {
+							//设置上传文件的新文件名，UUID
+							String fileNewName = UUID.randomUUID().toString().replace("-","")//3333-3333-333
+									+ "."
+									+ fileName.substring(fileName.indexOf(".") + 1);//yuliuxin.jpg
+							//把文件保存在服务器上本web应用目录下
+							File fullFile = new File(getServletContext()  //  /uploadFile
+									.getRealPath("/images/photo/"), fileNewName);
+							//写文件
+							item.write(fullFile);
+							//修改用户的头像路径image_path
+							response.getWriter().print(fileNewName);
+							//response.getWriter().print(request.getContextPath()+"/images/photo/9956b56a53c54cd6885d7a10736f3b77.png");
+					} else {
+						}
+						item.delete();
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	/**
+	 * 用户管理：添加
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 * @throws ServletException 
+	 */
+    private void UserManagerAdd(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        System.out.println("用户管理添加");
+        String id=request.getParameter("id");
+    	String username=request.getParameter("username");
+		String password=request.getParameter("password");
+		String password_confirm=request.getParameter("password_confirm");
+		String realname=request.getParameter("realname");
+		String rule=request.getParameter("rule");
+		String sex=request.getParameter("sex");
+		System.out.println(username);
+		System.out.println(password);
+		System.out.println(realname);
+		System.out.println(rule);
+		System.out.println(sex);
+		UserService userService=UserService.getInstance();
+		boolean i=userService.UserManagerAdd(null,username, password,sex, Integer.parseInt(rule), realname);
+        if(i) {
+        	response.setContentType("text/html;charset=utf-8");
+        	response.getWriter().print("<script>alert('删除成功');</script>");
+        	request.getRequestDispatcher("admin/management.jsp").forward(request, response);
+        }else {
+        	response.setContentType("text/html;charset=utf-8");
+        	response.getWriter().print("<script>alert('添加失败');</script>");
+        }
+		
+		
+		
+	}
+	/**
+     * 用户管理：去添加
+     * @param request
+     * @param response
+     */
+    private void toUserManagerAdd(HttpServletRequest request, HttpServletResponse response) {
+		// 跳转到添加页面
+    	System.out.println("用户管理去添加");
+    	try {
+			request.getRequestDispatcher("admin/management_add.jsp").forward(request, response);
+		} catch (ServletException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	/**
+     * 用户管理：更新密码
+     * @param request
+     * @param response
+     */
+	private void UserUpdetePassword(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("用户管理更改密码");
+		String id=request.getParameter("id");
+		String password=request.getParameter("password");
+		String NewPassword=request.getParameter("NewPassword");
+		String NewPassword_confirm=request.getParameter("NewPassword_confirm");
+		
+	
+		//根据id获取数据库的密码
+		User user=new User(Integer.parseInt(id), null, null, null,null, null, null,null, null, null,null, null, null,null, null,null);
+		UserService userService=UserService.getInstance();
+		User user1=userService.UserQueryId(user);
+		System.out.println(id);
+		System.out.println(password);
+		System.out.println(NewPassword);
+		System.out.println(NewPassword_confirm);
+		System.out.println(user1.toString());
+		StringBuffer sb = UserPasswordData(password, NewPassword, NewPassword_confirm, user1.getPassword());
+		//将错误信息传到前端界面
+		if(sb.length()>0) {
+			request.setAttribute("mima", sb.toString());
+			try {
+				request.getRequestDispatcher("admin/management_password.jsp").forward(request, response);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else {
+//			通过验证，调用service方法修改密码
+			UserService.getInstance().UserUpdetePassword(user.getId(),NewPassword);
+//			返回结果给用户
+			response.setContentType("text/html;charset=utf-8");
+			try {
+				response.getWriter().println("<script>alert('修改密码成功');</script>");
+				//重定向
+				response.sendRedirect("admin/management.jsp");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+		
+		
+		
+	}
+	/**
+	 * 用户管理：判断是密码是为空和比对原密码
+	 * @param password
+	 * @param newPassword
+	 * @param comfirmPassword
+	 * @param rightPassword
+	 * @return
+	 */
+	private StringBuffer UserPasswordData(String password, String NewPassword, String NewPassword_confirm, String rightPassword) {
+		StringBuffer sb = new StringBuffer("");
+		if (password == null || "".equals(password.trim())) {
+			sb.append("密码为空");
+		}
+		// 要把输入的密码比对 rightPassword：数据库的密码
+		if (password != null && !password.equals(rightPassword)) {
+			sb.append("原密码不正确");
+		}
+		if (NewPassword == null || "".equals(NewPassword.trim())) {
+			sb.append("新密码为空");
+		}
+
+		if (NewPassword_confirm == null || "".equals(NewPassword_confirm.trim())) {
+			sb.append("验证新密码为空");
+		}
+		return sb;
+	}
+
+
+
+	/**
+	 * 用户管理：去修改密码
+	 * @param request
+	 * @param response
+	 */
+	private void ToUserUpdatePassWord(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("去修改用户管理的密码");
+		String id=request.getParameter("id");
+		String username=request.getParameter("username");
+		System.out.println(id);
+		System.out.println(username);
+		request.setAttribute("id", id);
+		request.setAttribute("username", username);
+//		跳转到前端界面
+		try {
+			request.getRequestDispatcher("admin/management_password.jsp").forward(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	/**
+	 * my数据管理：值传到另外的页面
+	 * <p>Title: shujuxg</p>  
+	 * <p>Description: </p>  
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 * @throws ServletException 
+	 */
+	private void shujuxg(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("数据管理toEdit...");
+		String datid = request.getParameter("datid");
+		System.out.println("datid=" + datid);
+//		Datamanager datas = Datamanager.getInstance().shujuxg(Integer.parseInt(datid));
+		Datamanager datas = UserService.getInstance().shujuxg(Integer.parseInt(datid));
+		System.out.println("-----datas="+datas.toString());
+		request.setAttribute("datas", datas);//把后台得到的数据写进datas，然后显示在前端上面
+
+		request.getRequestDispatcher("admin/data_management_look.jsp").forward(request, response);
+		
+	}
+
+	/**
+
+	 * 数据管理：值跳转到更新页面
+	 * <p>Title: shujuxg</p>  
+	 * <p>Description: </p>  
+	 * @param request
+	 * @param response
+	 */
+	private void UserManageUpdete(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("用户管理编辑---UserManageUpdete");
+		String id=request.getParameter("id");
+		String sex=request.getParameter("sex");
+		String rule=request.getParameter("rule");
+		String content=request.getParameter("content");
+		
+		System.out.println(id);
+		System.out.println(sex);
+		System.out.println(rule);
+		System.out.println(content);
+		UserService userService=UserService.getInstance();
+		userService.UserManageUpdete(Integer.parseInt(id), sex, Integer.parseInt(rule), content);
+		//跳转
+		try {
+			response.getWriter().println("<script>window.parent.location.href='admin/management.jsp'</script>");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+
+	/**
+	 * 档案管理：添加用户
+
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 * @throws ServletException 
+	 */
+	private void danganAdd(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+
+		System.out.println("档案添加用户....");
+		String realname = request.getParameter("realname");
+		String sex = request.getParameter("sex");
+		String province = request.getParameter("province");
+		String age = request.getParameter("age");
+		String religion = request.getParameter("religion");
+		String culture = request.getParameter("culture");
+		String address = request.getParameter("address");
+		String phone = request.getParameter("phone");
+		
+
+		System.out.println("realname:"+realname);
+		System.out.println("sex:"+sex);
+		System.out.println("age:"+age);
+		System.out.println("religion:"+religion);
+		System.out.println("culture:"+culture);
+		System.out.println("address:"+address);
+		System.out.println("phone:"+phone);
+		
+		
+		StringBuffer sb = extracted(realname, age, address, phone);
+		if(sb.length()>0) {
+			request.setAttribute("mess", sb.toString());
+			request.getRequestDispatcher("admin/dangan_add.jsp").forward(request, response);
+		} else {
+
+			User user = new User();
+			Province p = new Province();
+			p.setId(Integer.parseInt(province));
+			
+			Culture c = new Culture();
+			c.setId(Integer.parseInt(culture));
+			
+			Religion r = new Religion();
+			r.setId(Integer.parseInt(religion));
+			
+			Integer seq = UserService.getInstance().getAutoCreateSeq();
+			String username = "auto-create-Patient"+seq;
+			
+			user.setUsername(username);
+			user.setRealname(realname);
+			user.setSex(sex);
+			user.setPid(p);
+			user.setAge(Integer.parseInt(age));
+			user.setCulture(c);
+			user.setReligion(r);
+			user.setAddress(address);
+			user.setPhone(phone);
+			
+			if(UserService.getInstance().add_DanganUser(user)) {
+				System.out.println("成功");
+				
+				response.getWriter().println("<script>window.parent.location.href='admin/dangan.jsp'</script>");
+			} else {
+				request.setAttribute("mess", "添加用户失败");
+				request.getRequestDispatcher("admin/dangan_add.jsp").forward(request, response);
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+	}
+	private StringBuffer extracted(String realname, String age, String address, String phone) {
+		StringBuffer sb = new StringBuffer();
+		if(realname == null || "".equals(realname)) {
+			sb.append("真实姓名必填");
+		}
+	
+		
+		if(age == null || "".equals(age)) {
+			sb.append("年龄必填");
+		}
+		
+		if(address == null || "".equals(address)) {
+			sb.append("家庭地址必填");
+		} 
+		
+		if(phone == null || "".equals(phone)) {
+			sb.append("联系方式必填");
+		}
+		
+		return sb;
+	}
+
+	/**
+
+	 * 
+
+	 * 档案管理：去到添加用户界面
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 * @throws ServletException 
+	 */
+	private void toDanganAdd(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		request.getRequestDispatcher("admin/dangan_add.jsp").forward(request, response);;
+	}
+	/**
+
+
+	 * 数据管理： 批量删除
+
+	 * <p>
+	 * Title: shujuplsc
+	 * </p>
+	 * <p>
+	 * Description:
+	 * </p>
+	 * 
+
+
+	 * <p>Title: shujuplsc</p>  
+	 * <p>Description: </p>  
+
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	private void shujuplsc(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		// 获取数据集合id
+		String datid[] = request.getParameterValues("selected");
+		System.out.println("这是删除的datid=" + datid);
+		UserService userService = UserService.getInstance();
+		// 以数组作为参照实现批量删除（代用sevice层方法）
+		userService.shujuplsc(datid);
+		// 给客户端返回一个文本结果：删除成功
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter pw = null;
+		try {
+			pw = response.getWriter();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		pw.println("<script>alert('添加成功');</script>");
+
+		// 从定向跳转
+//				response.sendRedirect(request.getContextPath()+"/UserServlet?operator=shujuguangli");
+
+		try {
+			request.getRequestDispatcher("admin/data_management.jsp").forward(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+	}
+
+
+	/**
+	 * 网站信息管理   首页     分页请求方法
+
+
+	 * @param request
+	 * 
+	 * @param response
+	 */
+	private void webPageCurrent(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		System.out.println("into webPageCurrent........................");
+		String page_current = request.getParameter("page_current");
+		System.out.println("page_current:" + page_current);
+		// 请求进入首页的同时也把数据显示出来
+		// 1.先查询数据库信息
+		WebInfoManageService webService = WebInfoManageService.getInstance();
+		List<WebInfoManage> listWeb = webService.checkHome();
+
+		PageUtil p = new PageUtil(listWeb, 10, Integer.parseInt(page_current));
+		request.setAttribute("page", p);
+		request.setAttribute("listWeb", p.getSubList());
+		request.setAttribute("pageCount", p.getPageCount());// 总页数
+
+		Object object = request.getAttribute("pageCount");// 总页数
+		Integer count = (Integer) object;
+
+		// 如果 go按钮 请求的页数大于最大页数的时候 当前页码数的赋值
+		if (Integer.parseInt(page_current) > count) {
+			request.setAttribute("page_current", count);// 当前请求的页面
+			request.getRequestDispatcher("admin/home.jsp").forward(request, response);
+		} else {
+			request.setAttribute("page_current", page_current);// 当前请求的页面
+			request.getRequestDispatcher("admin/home.jsp").forward(request, response);
+		}
+
+	}
+	/**
+	 * 网站信息管理   首页     分页请求方法
+
+
+	 * @param request
+	 * 
+	 * @param response
+	 */
+	private void webAboutPageCurrent(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		System.out.println("into webPageCurrent........................");
+		String page_current = request.getParameter("page_current");
+		System.out.println("page_current:" + page_current);
+		// 请求进入首页的同时也把数据显示出来
+		// 1.先查询数据库信息
+		WebInfoManageService webService = WebInfoManageService.getInstance();
+		List<WebInfoManage> listWeb = webService.checkHome();
+
+		PageUtil p = new PageUtil(listWeb, 10, Integer.parseInt(page_current));
+		request.setAttribute("page", p);
+		request.setAttribute("listWeb", p.getSubList());
+		request.setAttribute("pageCount", p.getPageCount());// 总页数
+
+		Object object = request.getAttribute("pageCount");// 总页数
+		Integer count = (Integer) object;
+
+		// 如果 go按钮 请求的页数大于最大页数的时候 当前页码数的赋值
+		if (Integer.parseInt(page_current) > count) {
+			request.setAttribute("page_current", count);// 当前请求的页面
+			request.getRequestDispatcher("admin/about_us.jsp").forward(request, response);
+		} else {
+			request.setAttribute("page_current", page_current);// 当前请求的页面
+			request.getRequestDispatcher("admin/about_us.jsp").forward(request, response);
+		}
+
+	}
+
+
+	/**
+	 * 
+	 * 页面请求首页信息
+	 * 
+	 * @param request
+	 * @param response
+	 */
+	private void toWebHome(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		System.out.println("into toWebHome........................");
+		// String page_current=request.getParameter("page_current");
+		// System.out.println("page_current:"+page_current);
+		// 请求进入首页的同时也把数据显示出来
+		// 1.先查询数据库信息
+		WebInfoManageService webService = WebInfoManageService.getInstance();
+		List<WebInfoManage> listWeb = webService.checkHome();
+
+		PageUtil p = new PageUtil(listWeb, 10, null);
+		request.setAttribute("page", p);
+		request.setAttribute("listWeb", p.getSubList());
+		request.setAttribute("pageCount", p.getPageCount());// 总页数
+		request.getRequestDispatcher("admin/home.jsp").forward(request, response);
+
+	}
+
+	/**
+	 * 
+	 * 档案管理：编辑用户信息方法
+	 * 
+	 * @param request
+	 * @param response
+	 */
+	private void danganEdit(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+
+		System.out.println("档案管理Edit....");
+
+		String uid = request.getParameter("uid");
+		String realname = request.getParameter("realname");
+		String sex = request.getParameter("sex");
+		String age = request.getParameter("age");
+		String province = request.getParameter("province");
+		String culture = request.getParameter("culture");
+		String religion = request.getParameter("religion");
+		String phone = request.getParameter("phone");
+
+		System.out.println("UID：" + uid);
+		System.out.println("真实姓名：" + realname);
+		System.out.println("性别：" + sex);
+		System.out.println("年龄：" + age);
+		System.out.println("省份：" + province);
+		System.out.println("文化：" + culture);
+		System.out.println("宗教：" + religion);
+		System.out.println("手机：" + phone);
+
+		User user = new User();
+		Province p = new Province();
+		p.setId(Integer.parseInt(province));
+
+		Culture c = new Culture();
+		c.setId(Integer.parseInt(culture));
+		Religion r = new Religion();
+		r.setId(Integer.parseInt(religion));
+		user.setId(Integer.parseInt(uid));
+		user.setRealname(realname);
+		user.setSex(sex);
+		user.setAge(Integer.parseInt(age));
+		user.setPid(p);
+		user.setCulture(c);
+		user.setReligion(r);
+		user.setPhone(phone);
+
+		if (UserService.getInstance().updateUserDangan(user)) {
+			try {
+//				request.getRequestDispatcher("admin/dangan.jsp").forward(request, response);
+
+				response.getWriter().println("<script>window.parent.location.href='admin/dangan.jsp'</script>");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				request.setAttribute("mess", "更新失败");
+				request.getRequestDispatcher("admin/dangan_edit.jsp").forward(request, response);
+			} catch (ServletException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	/**
+	 * 用户管理:去编辑
+
+	 * @param request
+	 * @param response
+	 */
+	private void toUserManagement_edit(HttpServletRequest request, HttpServletResponse response) {
+		//获取
+		String id=request.getParameter("id");
+
+		String rule=request.getParameter("rule");
+
+		System.out.println(id);
+		User user=new User(Integer.parseInt(id), null, null, null,null, null, null,null, null, null,null, null, null,null, null,null);
+		UserService userService=UserService.getInstance();
+		User user1=userService.UserQueryId(user);
+		System.out.println(user1);
+		request.setAttribute("user", user1);
+		Integer rid=user1.getRule().getId();
+	    System.out.println(rid);
+	    System.out.println(rule);
+		request.setAttribute("userrule", rid);
+		request.setAttribute("rules", rule);
+		
+		
+		try {
+			//跳转
+			request.getRequestDispatcher("admin/management_edit.jsp").forward(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	/**
+	 * 用户管理：单独删除
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	private void deleteUsersOne(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String id = request.getParameter("id");
+		System.out.println(id);
+		String[] arr = new String[1];
+		arr[0] = id;
+
+		UserService userService = UserService.getInstance();
+		// 以数组作为参照实现批量删除
+		boolean i=userService.deleteUsers(arr);
+        if(i) {
+        	response.setContentType("text/html;charset=utf-8");
+        	response.getWriter().print("<script>alert('删除成功');</script>");
+    		
+        	// 从定向跳转
+    		response.sendRedirect(request.getContextPath() + "/UserServlet?operator=toQueryUser");
+    		// 给客户端返回一个文本结果：删除成功
+
+        }
+		
+
+	}
+
+	/**
+	 * 
+	 * 档案管理：去编辑信息界面
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	private void toDanganEdit(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		System.out.println("档案管理toEdit...");
+		String uid = request.getParameter("uid");
+		System.out.println("uid=" + uid);
+		User user = UserService.getInstance().edit_selectUser(Integer.parseInt(uid));
+
+		request.setAttribute("user", user);
+
+		request.getRequestDispatcher("admin/dangan_edit.jsp").forward(request, response);
+	}
+
+	/**
+	 * 档案管理：分页查询
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	private void toDanganPage(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		
+		String page_current = request.getParameter("page_current");
+		String jump = request.getParameter("jump");
+		System.out.println("jump=" + jump);
+		HttpSession session = request.getSession();
+		List<User> list = (List<User>) session.getAttribute("userlist");
+		PageUtil pg = null;
+		// 如果没有取到jump值，则是通过点击第几页的
+		if (jump == null || "".equals(jump)) {
+			String realname = request.getParameter("realname");
+			String sex = request.getParameter("sex");
+			String age = request.getParameter("age");
+			String province = request.getParameter("province");
+			String culture = request.getParameter("culture");
+			String religion = request.getParameter("religion");
+
+			request.setAttribute("realname", realname);
+			request.setAttribute("sex", sex);
+			request.setAttribute("age", age);
+			request.setAttribute("province", Integer.parseInt(province));
+			request.setAttribute("culture", culture);
+			request.setAttribute("religion", religion);
+
+			System.out.println("真实姓名：" + realname);
+			System.out.println("性别：" + sex);
+			System.out.println("年龄：" + age);
+			System.out.println("省份：" + province);
+			System.out.println("文化：" + culture);
+			System.out.println("宗教：" + religion);
+
+			
+			pg = new PageUtil(list, null, Integer.parseInt(page_current));
+			
+			request.setAttribute("users", pg.getSubList());
+			request.setAttribute("pageCount", pg.getPageCount());
+			request.setAttribute("page_current", pg.getPage_current());
+			request.setAttribute("dataSize", pg.getDataSize());
+			request.setAttribute("pageSize", pg.getPageSize());
+
+			request.getRequestDispatcher("admin/dangan.jsp").forward(request, response);
+			
+		} else {
+			// 如果取到jump值，则是通过自己输入第几页的 ajax
+			pg = new PageUtil(list, null, Integer.parseInt(jump));
+			
+			request.setAttribute("users", pg.getSubList());
+			request.setAttribute("pageCount", pg.getPageCount());
+			request.setAttribute("page_current", pg.getPage_current());
+			request.setAttribute("dataSize", pg.getDataSize());
+			request.setAttribute("pageSize", pg.getPageSize());
+			request.getRequestDispatcher("admin/dangan.jsp").forward(request, response);
+			
+			
+			/*
+			  ajax Go
+			List<User> user = pg.getSubList();
+			String result = JSON.toJSONString(user);
+			System.out.println(result);
+			response.setContentType("text/plain;charset=utf-8");
+			response.getWriter().println(result);
+			*/
+			
+			
+		}
+		
+		
+	}
+
+	/**
+	 * 
+	 * 用户管理：批量删除
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	private void deleteUsers(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("into delete");
+		String []uids = request.getParameterValues("checkbox");
+		System.out.println("uids:" + uids);
+		UserService userService = UserService.getInstance();
+		// 以数组作为参照实现批量删除
+		boolean i=userService.deleteUsers(uids);
+        if(i){
+			
+    		// 给客户端返回一个文本结果：删除成功
+    		response.setContentType("text/html;charset=utf-8");
+    		PrintWriter pw = response.getWriter();
+    		pw.println("<script>alert('删除成功');</script>");
+    		
+			 //从定向跳转 
+    		
+			 response.sendRedirect(request.getContextPath() +"/admin/management.jsp");
+			
+        	
+        }
+		
+
+	}
+
+	/**
+	 * 
+	 * 网站信息管理首页添加方法
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	private void addWebHome(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		System.out.println("into addHome..................");
+		String module = request.getParameter("module");
+		String title = request.getParameter("title");
+		String photoPath=request.getParameter("photoPath");
+		//System.out.println("photoPath:"+photoPath);
+		String content = request.getParameter("content");
+		Module mo=new Module(Integer.parseInt(module));
+		WebInfoManage webMa = new WebInfoManage(null,mo,title, photoPath, content,null);
+		WebInfoManageService webService = WebInfoManageService.getInstance();
+		boolean b = webService.addHome(webMa);
+		System.out.println(b);
+		if (b) {
+			toWebHome(request, response);
+		}
+	}
+
+	/**
+	 * 
+	 * 网站信息管理首页请求添加方法
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	private void toWebAddHome(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.sendRedirect("admin/home_add.jsp");
+	}
+
+	/**
+	 * 
+	 * 档案管理：联合查询记录
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	private void queryUserByCondition(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String realname = request.getParameter("realname");
+		String sex = request.getParameter("sex");
+		String age = request.getParameter("age");
+		String province = request.getParameter("province");
+		String culture = request.getParameter("culture");
+		String religion = request.getParameter("religion");
+
+		request.setAttribute("realname", realname);
+		request.setAttribute("sex", sex);
+		request.setAttribute("age", age);
+		request.setAttribute("province", Integer.parseInt(province));
+		request.setAttribute("culture", culture);
+		request.setAttribute("religion", religion);
+
+		System.out.println("真实姓名：" + realname);
+		System.out.println("性别：" + sex);
+		System.out.println("年龄：" + age);
+		System.out.println("省份：" + province);
+		System.out.println("文化：" + culture);
+		System.out.println("宗教：" + religion);
+
+		User user = new User();
+		Province p = new Province();
+		Culture c = new Culture();
+		Religion r = new Religion();
+		user.setRealname(realname);
+		user.setSex(sex);
+
+		if (age == null || "".equals(age)) {
+			user.setAge(null);
+		} else {
+			user.setAge(Integer.parseInt(age));
+		}
+
+		p.setId(Integer.parseInt(province));
+		user.setPid(p);
+
+		c.setId(Integer.parseInt(culture));
+		user.setCulture(c);
+
+		r.setId(Integer.parseInt(religion));
+		user.setReligion(r);
+
+		List<User> userlist = UserService.getInstance().queryUsers(user);
+		System.out.println(userlist);
+		// 把查询到的userlist记录存放到session，供topage分页查询使用
+
+		HttpSession session = request.getSession();
+		session.setAttribute("userlist", userlist);
+
+		if (userlist == null || userlist.size() == 0) {
+			request.setAttribute("mess", "没有查到数据");
+			request.getRequestDispatcher("admin/dangan.jsp").forward(request, response);
+		} else {
+			// 分页查询
+			PageUtil pg = new PageUtil(userlist, null, null);
+
+			request.setAttribute("users", pg.getSubList());
+			request.setAttribute("pageCount", pg.getPageCount());
+			request.setAttribute("page_current", pg.getPage_current());
+			request.setAttribute("dataSize", pg.getDataSize());
+			request.setAttribute("pageSize", pg.getPageSize());
+
+			request.getRequestDispatcher("admin/dangan.jsp").forward(request, response);
+		}
+
+	}
+
+	/**
+	 * 数据管理查询
+	 * <p>
+	 * Title: shujuguangli
+	 * </p>
+	 * <p>
+	 * Description:
+	 * </p>
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	private void shujuguangli(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+//		System.out.println("into shujuguangli...............");
+		request.setCharacterEncoding("utf-8");
+		// 从前端获取查询的值
+		String shuju_id = request.getParameter("shuju_id");
+		String shuju_name = request.getParameter("shuju_name");
+		String shuju_lx = request.getParameter("shuju_lx");
+		Integer shu = null;
+		if ("".equals(shuju_id)) {
+			shu = null;
+		} else {
+			shu = Integer.parseInt(shuju_id);
+		}
+		if ("".equals(shuju_name)) {
+			shuju_name = null;
+		}
+		if ("".equals(shuju_lx)) {
+			shuju_lx = null;
+		} else if ("测试题".equals(shuju_lx)) {
+			shuju_lx = "1";
+		} else if ("综合测试".equals(shuju_lx)) {
+			shuju_lx = "2";
+		} else {
+			shuju_lx = null;
+		}
+//		System.out.println("-----------:" + shuju_id);
+			System.out.println(shuju_lx);
+		// 把值写进实体类
+//		Datamanager dat=new Datamanager(Integer.parseInt(shuju_id),null,null,null,null);
+		Datamanager dat = new Datamanager();
+		dat.setId(shu);
+
+		System.out.println("dat.getId()" + dat.getId());
+		// 获取名字
+		User user = new User();
+		user.setUsername(shuju_name);
+//		user.getUsername();
+		dat.setUser(user);
+//		//获取测试类型
+//		Testtype test=new Testtype();
+//		test.setId(Integer.parseInt(shuju_lx));
+//		dat.setTestttpe(test);
+
+		// 调用底层service，service调用dao
+		UserService userService = UserService.getInstance();
+		List<Datamanager> list = userService.shujuguangli(dat);
+//				HttpSession session = request.getSession();
+//				session.setAttribute("userlist", list);
+		request.setAttribute("list", list);
+//				System.out.println("我是list"+list.toString());
+		if (list == null || list.size() == 0) {
+			// 告诉用户查无数据
+			request.setAttribute("message", "没有找到您要的数据");
+					System.out.println("找不到");
+//					request.getRequestDispatcher("admin/userinfo_manage.jsp").forward(request, response);
+		} else {
+
+			System.out.println("已经找到了");
+			request.getRequestDispatcher("admin/data_management.jsp").forward(request, response);
+
+		}
+
+	}
+
+	/**
+	 * 去到档案管理界面
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	private void toDangan(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		System.out.println("档案。。。");
+		List<Province> provinces = ProvinceService.getInstance().getAllProvince();
+
+		HttpSession session = request.getSession();
+
+		session.setAttribute("provinces", provinces);
+
+		request.getRequestDispatcher("admin/dangan.jsp").forward(request, response);
+	}
+
+	/**
+	 * ajax验证注册用户是否已存在
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	private void checkUsername(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("into checkUsername...................");
+		String username = request.getParameter("username");
+
+		UserService userService = UserService.getInstance();
+		boolean b = userService.usernameExist(username);
+		if (b) {
+			String result2 = "用户名已存在";
+			String result = JSON.toJSONString(result2);
+			response.setContentType("text/plain;charset=utf-8");
+			response.getWriter().println(result);
+		} else {
+			String result2 = "由字母、数字或“_”组成，长度不少于6位，不多于30位";
+			String result = JSON.toJSONString(result2);
+			response.setContentType("text/plain;charset=utf-8");
+			response.getWriter().println(result);
+		}
+	}
+
+	/**
+	 * 用户管理查询方法
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	private void QueryUser(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("用户管理查询");
+		// 获取前端界面的值
+		String id = request.getParameter("id");
+		String username = request.getParameter("username");
+		String sex = request.getParameter("sex");
+		System.out.println(id);
+		System.out.println(username);
+		System.out.println(sex);
+		// 封装数据
+		// 将registerTime转换成date类型
+
+//		User user=new User(Integer.parseInt(id), username,birthDate);
+		Integer uid = null;
+		if (id != null && !"".equals(id)) {
+			uid = Integer.parseInt(id);
+		} else {
+			uid = null;
+		}
+		if (username == null || "".equals(username)) {
+			username = null;
+		}
+		if (sex == null || "".equals(sex)) {
+			sex = null;
+		}
+		System.out.println("----");
+		System.out.println(uid);
+		System.out.println("----");
+		System.out.println(username);
+		System.out.println("----");
+		System.err.println(sex);
+		User user = new User(uid, username, null, null, null, sex, null, null, null, null, null, null, null, null, null,
+				null);
+		UserService userService = UserService.getInstance();
+		List<User> list = userService.QueryUser(user);
+		System.out.println(list.toString());
+		HttpSession session = request.getSession();
+		session.setAttribute("userlist", list);
+		request.setAttribute("list", list);
+
+		try {
+			// 跳转
+			request.getRequestDispatcher("admin/management.jsp").forward(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	// 跳转到用户管理界面
+	private void toQueryUser(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("去用户管理");
+		try {
+			request.getRequestDispatcher("admin/management.jsp").forward(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * 登录方法
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		System.out.println("登录。。。");
+		request.setCharacterEncoding("utf-8");
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String code = request.getParameter("code");
+
+		System.out.println("用户名：" + username);
+		System.out.println("密码：" + password);
+		System.out.println("验证码：" + code);
+
+		StringBuffer sb = validateLoginForm(username, password, code);
+		if (sb.length() > 0) {
+			request.setAttribute("mess", sb.toString());
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+
+		} else {
+
+			HttpSession session = request.getSession();
+
+			String right_code = (String) session.getAttribute("code");
+			System.out.println(right_code);
+
+			if (!code.equalsIgnoreCase(right_code)) {
+				request.setAttribute("mess", "验证码校验失败");
+				request.getRequestDispatcher("login.jsp").forward(request, response);
+
+			} else {
+				// 数据库查找是否有这个用户
+				User user = null;
+				user = UserService.getInstance().login(username, password);
+				// 添加用户信息给session
+				session.setAttribute("user", user);
+				if (user != null) {
+					System.out.println(user.toString());
+					if (user.getRule().getId() == 1) {
+						response.sendRedirect("admin/index.jsp");
+					} else if (user.getRule().getId() == 2) {
+						response.sendRedirect("admin/index.jsp");
+					} else if (user.getRule().getId() == 3) {
+						response.sendRedirect("user/user_index.jsp");
+					}
+//					request.getRequestDispatcher("user/index.jsp").forward(request, response);
+					// response.sendRedirect("user/index.jsp");
+				} else {
+					request.setAttribute("mess", "用户或密码输入错误");
+					request.getRequestDispatcher("login.jsp").forward(request, response);
+				}
+
+			}
+
+		}
+
+	}
+
+	private StringBuffer validateLoginForm(String username, String password, String code) {
+		StringBuffer sb = new StringBuffer();
+
+		if (username == null || "".equals(username)) {
+			sb.append("请输入用户名");
+		} else {
+
+			// 用户名正则校验
+			Pattern pattern = Pattern.compile("[0-9a-zA-Z\u4E00-\u9FA5]+");
+			Matcher matcher = pattern.matcher(username);
+
+			if (!matcher.matches()) {
+				sb.append("用户名格式不对");
+			}
+		}
+
+		if (password == null || "".equals(password)) {
+			sb.append("请输入密码");
+		}
+
+		if (code == null || "".equals(code)) {
+			sb.append("请输入验证码");
+		}
+		return sb;
+	}
+
+	private void toRegister(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		ProvinceService p = ProvinceService.getInstance();
+		List<Province> listProvince = p.getAllProvince();
+		request.setAttribute("list", listProvince);
+		request.getRequestDispatcher("register.jsp").forward(request, response);
+	}
+
+	/**
+	 * 请求注册
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	private void register(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		System.out.println("into register");
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String confirmPassword = request.getParameter("confirmPassword");
+		String realname = request.getParameter("realname");
+		String sex = request.getParameter("sex");
+		String pro = request.getParameter("pro");
+		String age = request.getParameter("age");
+		String culture = request.getParameter("culture");
+		String religion = request.getParameter("religion");
+		System.out.println("religion：" + religion);
+		String address = request.getParameter("address");
+		String phone = request.getParameter("phone");
+		String email = request.getParameter("email");
+		String content = request.getParameter("content");
+		// String address=request.getParameter("address");
+
+		StringBuffer sb = extracted(username, password, confirmPassword, realname, sex, pro, age, culture, religion,
+				address, phone);
+		if (sb.length() > 0) {
+			response.setContentType("text/html;charset=utf-8");
+			response.getWriter().print("<script>alert(" + sb.toString() + ")</script>");
+			request.getRequestDispatcher("register.jsp").forward(request, response);
+		} else {
+			System.out.println("pro" + pro);
+			Province province = new Province(pro);
+			Religion re = new Religion(Integer.parseInt(religion));
+			Culture cul = new Culture(Integer.parseInt(culture));
+
+			UserService userService = UserService.getInstance();
+			User user = new User(null, username, confirmPassword, null, realname, sex, null, null, province,
+					Integer.parseInt(age), cul, re, address, phone, email, content);
+			userService.register(user);
+			response.sendRedirect("login.jsp");
+
+		}
+	}
+
+	private StringBuffer extracted(String username, String password, String confirmPassword, String realname,
+			String sex, String pro, String age, String culture, String religion, String address, String phone) {
+		StringBuffer sb = new StringBuffer();
+		// 1对用户名进行校验
+		if (username == null || "".equals(username.trim())) {
+			sb.append("用户名为空");
+		} else {
+			// 2对用户名格式进行校验
+			Pattern pattern = Pattern.compile("[0-9a-zA-Z\u4E00-\u9FA5]+");
+			Matcher matcher = pattern.matcher(username);
+			if (!matcher.matches()) {
+				sb.append("用户名格式不对");
+			}
+		}
+		// 3对密码进行校验
+		if (password == null || "".equals(password.trim())) {
+			sb.append("密码为空");
+		}
+		// 4对确认密码进行校验
+		if (confirmPassword == null || "".equals(confirmPassword.trim())) {
+			sb.append("确认密码为空");
+		} else {
+			if (!confirmPassword.equals(password)) {
+				sb.append("两次密码输入不一致");
+			}
+		}
+		// 5对真实姓名进行校验
+		if (realname == null || "".equals(realname.trim())) {
+			sb.append("真实姓名不能为空");
+		}
+		// 6对性别进行校验
+		if (sex == null || "".equals(sex)) {
+			sb.append("性别不能为空");
+		}
+		// 7对省份进行校验
+		if (pro == null || "".equals(pro)) {
+			sb.append("省份不能为空");
+		}
+		// 8对年龄进行校验
+		if (age == null || "".equals(age)) {
+			sb.append("年龄不能为空");
+		}
+		// 9对文化程度进行校验
+		if (culture == null || "".equals(culture)) {
+			sb.append("文化程度不能为空");
+		} // 10对宗教信仰程度进行校验
+		if (religion == null || "".equals(religion)) {
+			sb.append("宗教信仰不能为空");
+		}
+		// 11对地址进行校验
+		if (address == null || "".equals(address.trim())) {
+			sb.append("地址不能为空");
+		} // 对手机号码进行校验
+		if (phone == null || "".equals(phone.trim())) {
+			sb.append("手机号码不能为空");
+		}
+		return sb;
+	}
+}

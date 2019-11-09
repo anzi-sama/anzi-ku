@@ -1,0 +1,182 @@
+用户表（user)
+
+* ID：数据类型int  （主键）
+* 用户名 username：varchar（唯一）
+* 密码 password：varchar（最少6位数字）
+* 用户角色 rule：varchar （1超级管理员、2管理员、3普通用户） 外键-关联权限表
+* 真实姓名 realName:  varchar
+* 性别 sex：char （1男、2女）
+* 注册时间 registerTime：date
+* 状态 status：char （1启用 0关闭）
+* 籍贯 provinceId：  varchar  外键-关联省份表   
+* 年龄 age： int
+* 文化程度 cultureId： int （1小学、2初中、3高中、4大专、5大学）  外键-关联文化表（culture）
+* 宗教信仰 religionId：int  （1佛、2伊斯兰、3基督、4其他）   外键-关联宗教表（religion）
+* 地址 address： varchar
+* 联系电话 phone： varchar 
+邮箱 email： varchar
+诊断信息 medical_info：varchar
+备注 content：varchar
+
+
+
+
+
+权限表 (rule)
+id(number)  content(varchar)
+1        超级管理员
+2        管理员
+3        普通用户
+
+
+文化表（culture）
+id(number)  content(varchar)
+1        小学
+2        初中
+3        高中
+4	 大专	
+5	 大学
+
+宗教表（religion）
+id(number)  content(varchar)
+1        佛教
+2        伊斯兰
+3        基督
+4        其他
+
+
+
+诊断表（medical）
+
+流水号 id：（主键）
+用户名 username ： varchar  外键-关联用户表（user）
+
+
+--------------------------------------------------------------------------------
+String[] name = new String[]{感觉过敏,幻觉,思维奔放};
+int[] status = new int[]{1,2,3,4,5,6,7,8,9,10};
+
+int[] get_status = new int[status.length];       {1,2,3,0,5,0,0,8,0,0};
+
+
+for(){
+	
+}
+
+
+
+${"感觉过敏"}
+
+
+${"幻觉"}
+
+${"思维奔放"}
+
+
+for(int i = 0; i<status.length; i++){
+	for(int j = 0; j<status.length; j++){
+		 if(get_status[j]==status[i]){
+			request.setAttribute(""+name[j],name[j]);
+		}	
+	}
+	
+}
+
+感觉过敏，幻觉，思维迟缓，
+
+--------------------------------------------------------------------------------------------------
+
+ganjueguomin = 感觉过敏
+
+ganjueguominstatus= 1
+
+huanjue = 幻觉
+
+huanjueidstatus =  0
+
+siweibeny = 思维奔逸
+
+siweibenystatus =  0
+
+siweichihuan = 思维迟缓
+
+siweichihuanstatus = 1
+
+-----------------------------------------------------------------------------------------
+String ganjueguomin = req.getparamiter("ganjueguomin");
+if(ganjueguomin == null){
+	ganjueguomin = "0";
+
+}
+
+String huanjue= req.getparamiter("huanjue");
+
+if("1".equals(huanjue)){
+
+    sb.append()
+
+} else{
+  
+}
+
+String siweichihuan= req.getparamiter("siweichihuan");
+
+
+//用户
+insert into value(huanjueidstatus ,huanjueidstatus,siweichihuanstatus)(huanjueidstatus  =  ? )
+
+
+
+//医生
+select * from medical
+
+-------------------------------------------------------------------------------------------------------------
+
+
+
+/*-------------不需要
+障碍类型表（block_type）
+
+id： (number)
+content：（varchar）
+*/---------------
+
+
+
+
+数据管理表（lol_datamanager）
+编号 id：number
+用户名 username：varchar（唯一）  外键-关联用户表（user）
+测试类型 testtype：number         外键-关联测试类型表（testtype）
+测试时间 testdate：date
+警告类型 warmtype：number         外键-关联警告表（warm）
+
+
+测试类型表（lol_testtype）
+id（number） content（varchar）
+1              测试题
+2              综合测试
+3              上传新闻
+
+警告表（warm）
+id（number） content（varchar）
+0              异常
+1              正常
+
+
+
+
+网站信息管理表（lol_webinfomanage）
+序号 id：number （主键）
+模块 module： varchar
+标题 title： varchar
+图片 imagepath： varchar
+上传时间/发表时间 uploadtime： date
+内容/文字信息 content ：varchar
+
+
+友情链接表（lol_friendconnect）
+流水号 id : number（主键）
+链接名 urlname： varchar  外键-关联用户表（user）
+url url ： varchar
+排序 sort： varchar

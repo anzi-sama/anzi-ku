@@ -1,0 +1,105 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <title>
+            用户管理-修改密码
+        </title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+        <link rel="stylesheet" href="<%=request.getContextPath() %>/css/x-admin.css" media="all">
+        <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-validation-1.14.0/lib/jquery-1.11.1.js"></script>
+        <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+    <script>
+//写js校验注册表单
+$().ready(function()//window.onload()
+{   alert();
+	//给表单注册校验事件
+	$("#UserUpDetePassword").validate({
+		
+		rules:{
+			password:"required",
+			NewPassword:"required",
+			NewPassword_confirm:"required"
+		
+		},messages:{
+			password:"请输入原密码",
+			NewPassword:"请输入新密码",
+			NewPassword_confirm:"请输入确认密码"
+			
+		}
+	});
+});
+</script>
+    </head>
+    <body>
+        <div class="x-body">
+            <form class="layui-form" id="UserUpDetePassword" action="<%=request.getContextPath() %>/UserServlet?operator=UserUpdetePassword" method="post">
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        昵称
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="hidden" name="id" value="${id}"/>
+                        <input type="text" id="L_username" name="username" disabled="" value="${username}" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>旧密码
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="password" id="password" name="password" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>新密码
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="password" id="NewPassword" name="NewPassword" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">
+                        6到16个字符
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>确认密码
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="password" id="NewPassword_confirm" name="NewPassword_confirm" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                    </label>
+                    <button  class="layui-btn" onClick="PassWordUpdete()">
+                        确定修改
+                    </button>
+                </div>
+               <%=request.getAttribute("mima")%><!-- 接收错误信息 -->
+            </form>
+        </div>
+        <script src="<%=request.getContextPath() %>/lib/layui/layui.js" charset="utf-8">
+        </script>
+        <script type="text/javascript">
+        function PassWordUpdete(){
+        	alert();
+        	 document.getElementById("form1").action="<%=request.getContextPath()%>/UserServlet?operator=UserUpdetePassword";
+	    	 document.getElementById("form1").submit();
+        	
+        }</script>
+        <script src="<%=request.getContextPath() %>/js/x-layui.js" charset="utf-8">
+        </script>
+    </body>
+
+</html>

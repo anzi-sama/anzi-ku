@@ -1,0 +1,103 @@
+package com.guat.controll;
+
+import java.io.IOException;
+import java.util.Random;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.guat.bean.Culture;
+import com.guat.bean.Province;
+import com.guat.bean.Religion;
+import com.guat.bean.Rule;
+import com.guat.bean.User;
+import com.guat.service.UserService;
+
+/**
+ * Servlet implementation class CreateUserInfinityServlet
+ */
+@WebServlet("/CreateUserInfinityServlet")
+public class CreateUserInfinityServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		User user = null;
+		
+		Random ran = new Random();
+		
+		String xing_str = "赵钱孙李周吴郑王冯陈褚卫蒋沈韩杨何吕施张金魏陶姜柏水窦章";
+		String ming_str = "怡萍诗涵雅婷雅涵晓兴飞小平建龙宇谟子辰辰湍灵骅株春莲娟敏智涵欣妍慧妍观博欣竹欣文博飞铭诗辰海传浩含雨荨轩杰诗晓诗晴雨展鸣若婧婧涵琪洪文阳默阳展旭刚晓建烁春金海军扬阳靖阳熙嘉萱阳";
+		
+		String username = "";
+		String realname = "";
+		String addr = "";
+		String phone = "";
+		String email = "";
+		String content = ""; 
+		
+		for (int i = 0; i < 300; i++) {
+			
+			username += xing_str.charAt(ran.nextInt(xing_str.length()));
+			username += ming_str.charAt(ran.nextInt(ming_str.length()));
+			
+			realname += xing_str.charAt(ran.nextInt(xing_str.length()));
+			for (int j = 0; j < ran.nextInt(3)+1; j++) {
+				realname += ming_str.charAt(ran.nextInt(ming_str.length()));
+			}
+			
+			for (int j = 0; j < 11; j++) {
+				addr += ming_str.charAt(ran.nextInt(ming_str.length()));
+				phone += ran.nextInt(10);
+				content += ming_str.charAt(ran.nextInt(ming_str.length()));
+				email += ran.nextInt(10);
+			}
+			
+			user = new User();
+			
+			Rule ru = new Rule();
+			ru.setId(ran.nextInt(3)+1);
+			
+			Culture c = new Culture();
+			c.setId(ran.nextInt(5)+1);
+			
+			Religion r = new Religion();
+			r.setId(ran.nextInt(4)+1);
+			
+			Province p = new Province();
+			p.setId(ran.nextInt(34)+1);
+			
+			user.setUsername(username);
+			user.setPassword("123456");
+			user.setRule(ru);
+			user.setRealname(realname);
+			user.setSex(String.valueOf(ran.nextInt(2)+1));
+			user.setStatus(String.valueOf(ran.nextInt(2)));
+			user.setPid(p);
+			user.setAge(ran.nextInt(100)+1);
+			user.setCulture(c);
+			user.setReligion(r);
+			user.setAddress(addr);
+			user.setPhone(phone);
+			user.setEmail(email);
+			user.setContent(content);
+		
+			UserService.getInstance().insertUserinfinity(user);
+			
+			username = "";
+			realname = "";
+		    addr = "";
+		    phone = "";
+			email = "";
+			content = ""; 
+		} 
+		 
+	}
+       
+  
+
+}

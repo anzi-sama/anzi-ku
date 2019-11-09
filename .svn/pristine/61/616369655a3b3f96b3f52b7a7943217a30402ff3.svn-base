@@ -1,0 +1,41 @@
+
+web课程内容：
+
+1.web的三大金刚： http  url   html
+
+2.servlet技术
+
+3.request response
+
+
+4.jsp技术
+
+
+5.数据的存放域： application  session  request
+
+${applicationScope.count}   ${sessionScope.user}    ${list}
+
+
+6.ajax 异步       下拉联动
+
+7.jndi    --->   配置了连接池
+
+8.报表的导出：  jxl
+
+9.jstl：core核心包
+
+10.EL表达式   在页面尽量不要写java代码
+
+11.文件上传
+
+12.拦截器， 过滤器
+
+13.密码加密，加盐   Md5Util.md5("123456"+"abc");
+
+14.自动登录
+
+15.json格式{"id":12,"username":"zhangsan"}  [{"id":12,"username":"zhangsan"}]
+
+16.crud(增删改查)
+
+

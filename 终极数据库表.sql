@@ -1,0 +1,1122 @@
+prompt PL/SQL Developer import file
+prompt Created on 2019Äê10ÔÂ14ÈÕ by °²×È.ÎÚ¶û¹§
+set feedback off
+set define off
+prompt Dropping LOL_CULTURE...
+drop table LOL_CULTURE cascade constraints;
+prompt Dropping LOL_TESTTYPE...
+drop table LOL_TESTTYPE cascade constraints;
+prompt Dropping TAB_PROVINCE...
+drop table TAB_PROVINCE cascade constraints;
+prompt Dropping LOL_RELIGION...
+drop table LOL_RELIGION cascade constraints;
+prompt Dropping LOL_RULE...
+drop table LOL_RULE cascade constraints;
+prompt Dropping LOL_USER...
+drop table LOL_USER cascade constraints;
+prompt Dropping LOL_WARM...
+drop table LOL_WARM cascade constraints;
+prompt Dropping LOL_DATAMANAGER...
+drop table LOL_DATAMANAGER cascade constraints;
+prompt Dropping LOL_FRIENDCONNECT...
+drop table LOL_FRIENDCONNECT cascade constraints;
+prompt Dropping LOL_MEDICAL...
+drop table LOL_MEDICAL cascade constraints;
+prompt Dropping LOL_WEBINFOMANAGE...
+drop table LOL_WEBINFOMANAGE cascade constraints;
+prompt Creating LOL_CULTURE...
+create table LOL_CULTURE
+(
+  id      NUMBER(11) not null,
+  content VARCHAR2(40)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_CULTURE
+  add constraint LOL_CULTURE_ID_PK primary key (ID)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+prompt Creating LOL_TESTTYPE...
+create table LOL_TESTTYPE
+(
+  id      NUMBER(11) not null,
+  content VARCHAR2(40)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_TESTTYPE
+  add constraint LOL_TESTTYPE_ID_PK primary key (ID)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+prompt Creating TAB_PROVINCE...
+create table TAB_PROVINCE
+(
+  id         NUMBER(11) not null,
+  provinceid VARCHAR2(6),
+  province   VARCHAR2(40)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+comment on column TAB_PROVINCE.id
+  is 'ID';
+comment on column TAB_PROVINCE.provinceid
+  is 'Ê¡·İ±êÊ¶';
+comment on column TAB_PROVINCE.province
+  is 'Ê¡·İÃû³Æ';
+alter table TAB_PROVINCE
+  add constraint TAB_PROVINCE_PK primary key (ID)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+prompt Creating LOL_RELIGION...
+create table LOL_RELIGION
+(
+  id      NUMBER(11) not null,
+  content VARCHAR2(40)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_RELIGION
+  add constraint LOL_RELIGION_ID_PK primary key (ID)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+prompt Creating LOL_RULE...
+create table LOL_RULE
+(
+  id      NUMBER(11) not null,
+  content VARCHAR2(40)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_RULE
+  add constraint LOL_RULE_ID_PK primary key (ID)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+prompt Creating LOL_USER...
+create table LOL_USER
+(
+  id           NUMBER(11) not null,
+  username     VARCHAR2(30) not null,
+  password     VARCHAR2(50) not null,
+  rule         NUMBER(11) not null,
+  realname     VARCHAR2(50) not null,
+  sex          CHAR(1) not null,
+  registertime DATE not null,
+  status       CHAR(1) not null,
+  pid          NUMBER(11) not null,
+  age          NUMBER(11) not null,
+  cultureid    NUMBER(11) not null,
+  religionid   NUMBER(11) not null,
+  address      VARCHAR2(100) not null,
+  phone        VARCHAR2(50) not null,
+  email        VARCHAR2(50),
+  content      VARCHAR2(50),
+  imagepath    VARCHAR2(200)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_USER
+  add constraint LOL_USER_ID_PK primary key (ID)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_USER
+  add constraint LOL_USER_USERNAME_UK unique (USERNAME)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_USER
+  add constraint LOL_USER_CULTUREID_FK foreign key (CULTUREID)
+  references LOL_CULTURE (ID);
+alter table LOL_USER
+  add constraint LOL_USER_PROVINCEID_FK foreign key (PID)
+  references TAB_PROVINCE (ID);
+alter table LOL_USER
+  add constraint LOL_USER_RELIGIONID_FK foreign key (RELIGIONID)
+  references LOL_RELIGION (ID);
+alter table LOL_USER
+  add constraint LOL_USER_RULE_FK foreign key (RULE)
+  references LOL_RULE (ID);
+alter table LOL_USER
+  add constraint LOL_USER_SEX_CK
+  check (sex in('1','2'));
+alter table LOL_USER
+  add constraint LOL_USER_STATUS_CK
+  check (status in('0','1'));
+
+prompt Creating LOL_WARM...
+create table LOL_WARM
+(
+  id      NUMBER(11) not null,
+  content VARCHAR2(40)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_WARM
+  add constraint LOL_WARM_ID_PK primary key (ID)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+prompt Creating LOL_DATAMANAGER...
+create table LOL_DATAMANAGER
+(
+  id       NUMBER(11) not null,
+  username VARCHAR2(30),
+  testtype NUMBER(11),
+  testdate DATE,
+  warmtype NUMBER(11)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_DATAMANAGER
+  add constraint LOL_DATAMANAGER_ID_PK primary key (ID)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_DATAMANAGER
+  add constraint LOL_DATAMANAGER_USERNAME_UK unique (USERNAME)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_DATAMANAGER
+  add constraint LOL_DATAMANAGER_TESTTYPE_FK foreign key (TESTTYPE)
+  references LOL_TESTTYPE (ID);
+alter table LOL_DATAMANAGER
+  add constraint LOL_DATAMANAGER_USERNAME_FK foreign key (USERNAME)
+  references LOL_USER (USERNAME);
+alter table LOL_DATAMANAGER
+  add constraint LOL_DATAMANAGER_WARMTYPE_FK foreign key (WARMTYPE)
+  references LOL_WARM (ID);
+
+prompt Creating LOL_FRIENDCONNECT...
+create table LOL_FRIENDCONNECT
+(
+  id      NUMBER(11) not null,
+  urlname VARCHAR2(20),
+  url     VARCHAR2(300),
+  sort    VARCHAR2(10)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255;
+alter table LOL_FRIENDCONNECT
+  add constraint LOL_FRIENDCONNECT_ID_PK primary key (ID)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255;
+alter table LOL_FRIENDCONNECT
+  add constraint LOL_FRIENDCONNECT_URLNAME_FK foreign key (URLNAME)
+  references LOL_USER (USERNAME);
+
+prompt Creating LOL_MEDICAL...
+create table LOL_MEDICAL
+(
+  id                         NUMBER(11) not null,
+  username                   VARCHAR2(30) not null,
+  hypersensitivity           VARCHAR2(20) not null,
+  hypersensitivitystatus     CHAR(1) not null,
+  hallucination              VARCHAR2(20) not null,
+  hallucinationstatus        CHAR(1) not null,
+  running_thought            VARCHAR2(20) not null,
+  running_thoughtstatus      CHAR(1) not null,
+  delayed_thinking           VARCHAR2(20) not null,
+  delayed_thinkingstatus     CHAR(1) not null,
+  high_spirits               VARCHAR2(20) not null,
+  high_spiritsstatus         CHAR(1) not null,
+  irritable                  VARCHAR2(20) not null,
+  irritablestatus            CHAR(1) not null,
+  enhanced_will              VARCHAR2(20) not null,
+  enhanced_willstatus        CHAR(1) not null,
+  self_injury                VARCHAR2(20) not null,
+  self_injurystatus          CHAR(1) not null,
+  mental_retardation         VARCHAR2(20) not null,
+  mental_retardationstatus   CHAR(1) not null,
+  diet                       VARCHAR2(20) not null,
+  dietstatus                 CHAR(1) not null,
+  sleep                      VARCHAR2(20) not null,
+  sleepstatus                CHAR(1) not null,
+  impotence                  VARCHAR2(20) not null,
+  impotencestatus            CHAR(1) not null,
+  sexual_orientation         VARCHAR2(20) not null,
+  sexual_orientationstatus   CHAR(1) not null,
+  personality_disorder       VARCHAR2(20) not null,
+  personality_disorderstatus CHAR(1) not null,
+  hyposexuality              VARCHAR2(20) not null,
+  hyposexualitystatus        CHAR(1) not null,
+  medical_info               VARCHAR2(20),
+  warmtype                   NUMBER(11),
+  testtime                   DATE not null,
+  testtype                   NUMBER(11) not null
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+comment on column LOL_MEDICAL.hypersensitivity
+  is '¸Ğ¾õ¹ıÃô';
+comment on column LOL_MEDICAL.hypersensitivitystatus
+  is '1¡¢Ñ¡ÖĞ 0¡¢Î´Ñ¡ÖĞ';
+comment on column LOL_MEDICAL.hallucination
+  is '»Ã¾õ';
+comment on column LOL_MEDICAL.running_thought
+  is 'Ë¼Î¬±¼Òİ';
+comment on column LOL_MEDICAL.delayed_thinking
+  is 'Ë¼Î¬³Ù»º';
+comment on column LOL_MEDICAL.high_spirits
+  is 'ÇéĞ÷¸ßÕÇ';
+comment on column LOL_MEDICAL.irritable
+  is 'Ò×¼¤Å­';
+comment on column LOL_MEDICAL.enhanced_will
+  is 'ÒâÖ¾ÔöÇ¿';
+comment on column LOL_MEDICAL.self_injury
+  is '×ÔÉË';
+comment on column LOL_MEDICAL.mental_retardation
+  is '¾«Éñ·¢Óı³Ù»º';
+comment on column LOL_MEDICAL.diet
+  is 'ÒûÊ³';
+comment on column LOL_MEDICAL.sleep
+  is 'Ë¯Ãß';
+comment on column LOL_MEDICAL.impotence
+  is 'Ñôğô';
+comment on column LOL_MEDICAL.sexual_orientation
+  is 'ĞÔÖ¸Ïò';
+comment on column LOL_MEDICAL.personality_disorder
+  is 'ÈË¸ñÕÏ°­';
+comment on column LOL_MEDICAL.hyposexuality
+  is 'ĞÔÓû¼õÍË';
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_ID_PK primary key (ID)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_USERNAME_UK unique (USERNAME)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_TESTTYPE_PK foreign key (TESTTYPE)
+  references LOL_TESTTYPE (ID);
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_WARMTYPE_PK foreign key (WARMTYPE)
+  references LOL_WARM (ID);
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_DELAYEDSTATUS_CK
+  check (delayed_thinkingstatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_DELAYED_CK
+  check (delayed_thinking in('Ë¼Î¬³Ù»º'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_DIETSTATUS_CK
+  check (dietstatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_DIET_CK
+  check (diet in('ÒûÊ³'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_ENHANCEDSTATUS_CK
+  check (enhanced_willstatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_ENHANCED_CK
+  check (enhanced_will in('ÒâÖ¾ÔöÇ¿'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_HALLSTATUS_CK
+  check (hallucinationstatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_HALL_CK
+  check (hallucination in('»Ã¾õ'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_HIGHSTATUS_CK
+  check (high_spiritsstatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_HIGH_CK
+  check (high_spirits in('ÇéĞ÷¸ßÕÇ'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_HYPERSTATUS_CK
+  check (hypersensitivitystatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_HYPE_CK
+  check (hypersensitivity in('¸Ğ¾õ¹ıÃô'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_HYPOSESTATUS_CK
+  check (hyposexualitystatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_HYPOSEXUALITY_CK
+  check (hyposexuality in('ĞÔÓû¼õÍË'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_IMPOTENCESTATUS_CK
+  check (impotencestatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_IMPOTENCE_CK
+  check (impotence in('Ñôğô'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_IRRITABLESTATUS_CK
+  check (irritablestatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_IRRITABLE_CK
+  check (irritable in('Ò×¼¤Å­'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_MENTALSTATUS_CK
+  check (mental_retardationstatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_MENTAL_CK
+  check (mental_retardation in('¾«Éñ·¢Óı³Ù»º'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_PERSONSTATUS_CK
+  check (personality_disorderstatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_PERSON_CK
+  check (personality_disorder in('ÈË¸ñÕÏ°­'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_RUNNINGSTATUS_CK
+  check (running_thoughtstatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_RUNNING_CK
+  check (running_thought in('Ë¼Î¬±¼Òİ'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_SELFSTATUS_CK
+  check (self_injurystatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_SELF_CK
+  check (self_injury in('×ÔÉË'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_SEXUALSTATUS_CK
+  check (sexual_orientationstatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_SEXUAL_CK
+  check (sexual_orientation in('ĞÔÖ¸Ïò'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_SLEEPSTATUS_CK
+  check (sleepstatus in('0','1'));
+alter table LOL_MEDICAL
+  add constraint LOL_MEDICAL_SLEEP_CK
+  check (sleep in('Ë¯Ãß'));
+
+prompt Creating LOL_WEBINFOMANAGE...
+create table LOL_WEBINFOMANAGE
+(
+  id         NUMBER(11) not null,
+  module     VARCHAR2(20),
+  title      VARCHAR2(20),
+  imagepath  VARCHAR2(200),
+  uploadtime DATE,
+  content    VARCHAR2(3000)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table LOL_WEBINFOMANAGE
+  add constraint LOL_WEBINFOMANAGE_ID_PK primary key (ID)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+prompt Disabling triggers for LOL_CULTURE...
+alter table LOL_CULTURE disable all triggers;
+prompt Disabling triggers for LOL_TESTTYPE...
+alter table LOL_TESTTYPE disable all triggers;
+prompt Disabling triggers for TAB_PROVINCE...
+alter table TAB_PROVINCE disable all triggers;
+prompt Disabling triggers for LOL_RELIGION...
+alter table LOL_RELIGION disable all triggers;
+prompt Disabling triggers for LOL_RULE...
+alter table LOL_RULE disable all triggers;
+prompt Disabling triggers for LOL_USER...
+alter table LOL_USER disable all triggers;
+prompt Disabling triggers for LOL_WARM...
+alter table LOL_WARM disable all triggers;
+prompt Disabling triggers for LOL_DATAMANAGER...
+alter table LOL_DATAMANAGER disable all triggers;
+prompt Disabling triggers for LOL_FRIENDCONNECT...
+alter table LOL_FRIENDCONNECT disable all triggers;
+prompt Disabling triggers for LOL_MEDICAL...
+alter table LOL_MEDICAL disable all triggers;
+prompt Disabling triggers for LOL_WEBINFOMANAGE...
+alter table LOL_WEBINFOMANAGE disable all triggers;
+prompt Disabling foreign key constraints for LOL_USER...
+alter table LOL_USER disable constraint LOL_USER_CULTUREID_FK;
+alter table LOL_USER disable constraint LOL_USER_PROVINCEID_FK;
+alter table LOL_USER disable constraint LOL_USER_RELIGIONID_FK;
+alter table LOL_USER disable constraint LOL_USER_RULE_FK;
+prompt Disabling foreign key constraints for LOL_DATAMANAGER...
+alter table LOL_DATAMANAGER disable constraint LOL_DATAMANAGER_TESTTYPE_FK;
+alter table LOL_DATAMANAGER disable constraint LOL_DATAMANAGER_USERNAME_FK;
+alter table LOL_DATAMANAGER disable constraint LOL_DATAMANAGER_WARMTYPE_FK;
+prompt Disabling foreign key constraints for LOL_FRIENDCONNECT...
+alter table LOL_FRIENDCONNECT disable constraint LOL_FRIENDCONNECT_URLNAME_FK;
+prompt Disabling foreign key constraints for LOL_MEDICAL...
+alter table LOL_MEDICAL disable constraint LOL_MEDICAL_TESTTYPE_PK;
+alter table LOL_MEDICAL disable constraint LOL_MEDICAL_WARMTYPE_PK;
+prompt Loading LOL_CULTURE...
+insert into LOL_CULTURE (id, content)
+values (1, 'Ğ¡Ñ§');
+insert into LOL_CULTURE (id, content)
+values (2, '³õÖĞ');
+insert into LOL_CULTURE (id, content)
+values (3, '¸ßÖĞ');
+insert into LOL_CULTURE (id, content)
+values (4, '´ó×¨' || chr(9) || '');
+insert into LOL_CULTURE (id, content)
+values (5, '´óÑ§');
+commit;
+prompt 5 records loaded
+prompt Loading LOL_TESTTYPE...
+insert into LOL_TESTTYPE (id, content)
+values (1, '²âÊÔÌâ');
+insert into LOL_TESTTYPE (id, content)
+values (2, '×ÛºÏ²âÊÔ');
+insert into LOL_TESTTYPE (id, content)
+values (3, 'ÉÏ´«ĞÂÎÅ');
+commit;
+prompt 3 records loaded
+prompt Loading TAB_PROVINCE...
+insert into TAB_PROVINCE (id, provinceid, province)
+values (1, '110000', '±±¾©');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (2, '120000', 'Ìì½ò');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (3, '130000', 'ºÓ±±Ê¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (4, '140000', 'É½Î÷Ê¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (5, '150000', 'ÄÚÃÉ¹Å×ÔÖÎÇø');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (6, '210000', 'ÁÉÄşÊ¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (7, '220000', '¼ªÁÖÊ¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (8, '230000', 'ºÚÁú½­Ê¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (9, '310000', 'ÉÏº£');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (10, '320000', '½­ËÕÊ¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (11, '330000', 'Õã½­Ê¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (12, '340000', '°²»ÕÊ¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (13, '350000', '¸£½¨Ê¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (14, '360000', '½­Î÷Ê¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (15, '370000', 'É½¶«Ê¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (16, '410000', 'ºÓÄÏÊ¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (17, '420000', 'ºş±±Ê¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (18, '430000', 'ºşÄÏÊ¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (19, '440000', '¹ã¶«Ê¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (20, '450000', '¹ãÎ÷×³×å×ÔÖÎÇø');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (21, '460000', 'º£ÄÏÊ¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (22, '500000', 'ÖØÇì');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (23, '510000', 'ËÄ´¨Ê¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (24, '520000', '¹óÖİÊ¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (25, '530000', 'ÔÆÄÏÊ¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (26, '540000', 'Î÷²Ø×ÔÖÎÇø');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (27, '610000', 'ÉÂÎ÷Ê¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (28, '620000', '¸ÊËàÊ¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (29, '630000', 'Çàº£Ê¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (30, '640000', 'ÄşÏÄ»Ø×å×ÔÖÎÇø');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (31, '650000', 'ĞÂ½®Î¬Îá¶û×ÔÖÎÇø');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (32, '710000', 'Ì¨ÍåÊ¡');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (33, '810000', 'Ïã¸ÛÌØ±ğĞĞÕşÇø');
+insert into TAB_PROVINCE (id, provinceid, province)
+values (34, '820000', '°ÄÃÅÌØ±ğĞĞÕşÇø');
+commit;
+prompt 34 records loaded
+prompt Loading LOL_RELIGION...
+insert into LOL_RELIGION (id, content)
+values (1, '·ğ½Ì');
+insert into LOL_RELIGION (id, content)
+values (2, 'ÒÁË¹À¼½Ì');
+insert into LOL_RELIGION (id, content)
+values (3, '»ù¶½½Ì');
+insert into LOL_RELIGION (id, content)
+values (4, 'ÆäËü');
+commit;
+prompt 4 records loaded
+prompt Loading LOL_RULE...
+insert into LOL_RULE (id, content)
+values (1, '³¬¼¶¹ÜÀíÔ±');
+insert into LOL_RULE (id, content)
+values (2, '¹ÜÀíÔ±');
+insert into LOL_RULE (id, content)
+values (3, 'ÆÕÍ¨ÓÃ»§');
+commit;
+prompt 3 records loaded
+prompt Loading LOL_USER...
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (15, '·ë¾¸', '123456', 3, 'Ç®º£', '1', to_date('10-10-2019 19:50:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 34, 36, 2, 3, 'ÁéÆ½Îõ½¨ÑôĞÀĞÀ´ºÚÓÏşºÆ', '25484408483', '33110634122', 'º­Õ¹¹ÛÏşÄ¬´ºÓîÃùÑôĞ¡Ãú', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (23, '½ªİ¡', '123456', 2, 'Àî¹Û', '2', to_date('10-10-2019 19:51:09', 'dd-mm-yyyy hh24:mi:ss'), '1', 34, 77, 4, 2, '½Üåû²©İ¡³½Ê«ĞùÖÇç÷¾üÃô', '39527157071', '65501521112', 'Æ½Ïşº­åûË¸ÇçÖñÎÄº­Óê¸Õ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (31, '½ª¹Û', '123456', 3, 'Îâº­', '2', to_date('10-10-2019 19:52:11', 'dd-mm-yyyy hh24:mi:ss'), '0', 26, 61, 4, 3, '·ÉÊ«¾üÖÇÊ«Ïş»ÛÑÅ¹Û¾êÎÄ', '65435511796', '64962363065', '³½ĞÀÑôº­Ê«¼ÎÖêÍÄº­ĞËº¬', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (41, 'Ç®¼Î', '123456', 3, 'ÎÀÁ«', '2', to_date('11-10-2019 00:59:28', 'dd-mm-yyyy hh24:mi:ss'), '0', 26, 18, 4, 2, 'º£²©ÃôÎõ·ÉË¸½¨º­åû»Û¾ê', '47790643335', '52216214836', 'ÚÓÖê¾ê´º»ÛÊ«ºÆæºåûĞÀÎÄ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (174, 'ÎâÃô', '123456', 3, 'ÑîÃúĞ¡', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 30, 81, 5, 3, 'Á«³½º­¾üÊ«Ë¸ÎÄÑôÖÇ¾üÆ½', '55802893623', '04264883850', 'ÑÅÑôÕ¹º­æÃ·Éº­Ê«¾ü¾üÎõ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (179, '°ØÖñ', '123456', 1, 'ÖÜÁú', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 24, 28, 1, 2, '²©¾¸ÑôĞù³½´«Ñô´ºÏşÆ½åû', '14641043323', '60450403933', 'Ğñº¬×Ó½ğ³½¹ÛÈôÑô¹Û·É³½', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (184, '°Ø½ğ', '123456', 2, 'ÎºåûÕ¹', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 23, 46, 4, 2, '¹ÛÏş´º³½¾üÎÄ½¨½ğ×ÓÊ«³½', '35314411097', '07772151456', 'Ê«æº½¨åû´ºË¸²©Ê«Õ¹Ñôº­', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (189, 'ÎÀÈô', '123456', 1, 'Ëï½¨Ğùº¬', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 13, 65, 2, 4, 'ÑïåûÁéæºº­åûºÆĞÀÓî»ÛÃù', '13293797315', '60222885532', '²©ÍÄ¸ÕĞÀÃô×ÓÑÅÓêÖêÎõÖñ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (206, 'Ëïº­', '123456', 1, 'ËïæÃÈôİ¡', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 26, 16, 3, 4, 'Ê«¼Î¸ÕĞÀ·ÉÖñÑÅ¹ÛÁúĞËÕ¹', '78630521494', '38907490176', '×Ó½ÜÏşÃù½ÜÆ¼¾¸ÎõÊ«Æ½¾ê', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (211, 'ÂÀÑï', '123456', 1, 'ÖÜ¹Û', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 28, 92, 5, 4, 'Ñô¾ê·ÉÎÄâùåûç÷ÓêÃôİ¡¼Î', '03340776825', '30847413235', 'Ãô¾êÓêÏşÆ½ÑÅº­ºÆæÃÑïÃô', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (216, 'ÎÀĞñ', '123456', 3, 'º«åû³½', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 2, 9, 1, 4, 'ÓêÑôº­×ÓÕ¹»Û³½½¨Æ½Ïşº­', '17033633560', '04556008539', 'Ê«Ğñ»Ûæè½¨ĞÀÑô¾üæèÃôĞñ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (224, 'Ñîº£', '123456', 1, 'ÑîÆ½Õ¹Óê', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 10, 40, 3, 4, 'Õ¹ĞÀº­¼ÎÑôç÷º­ºéåûÑôæÃ', '50650520269', '89292377940', '¾üÖÇº­Èôº­æºÊ«Îõ·ÉÏş¸Õ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (234, '½¯ĞÀ', '123456', 2, 'Ê©º­', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 2, 27, 1, 4, 'æÃÓîĞÀÁéÓîĞ¡Ê«ÓêÏşæÃº£', '79689143858', '69583454247', 'ÑÅåû´ºÓêÚÓÈôÍÄ·Éº£º­½¨', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (239, 'Ê©»Û', '123456', 3, 'ÂÀåûÊ«', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 13, 17, 1, 2, 'ÁéÕ¹ÏşÓîÎÄÑï½Üº£ÃôæºË¸', '88953381369', '74330156737', 'ÎÄÑôÊ«ĞÀÑôÃúÁ«Á«æºÎÄº£', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (256, 'Ê©Áé', '123456', 2, 'ÕÅÎÄ', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 33, 42, 1, 2, '·É×Óº­ÃùË¸ĞËÖÇÕ¹Öñ×ÓÑô', '82087862579', '19822903277', '»Û²©ĞùåûÎõÎõ½Ü¾¸Ä¬ÑïºÆ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (261, '°Ø¼Î', '123456', 1, 'ÂÀ²©Óê×Ó', '1', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 25, 84, 3, 4, 'ºéÎÄ¾üĞËÑô²©æÃÑôÑôæººÆ', '25356361785', '64159599374', 'Õ¹åû½¨ĞñÖÇæºÖêÊ«Ãô½¨Æ¼', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (266, 'ÍõÑô', '123456', 2, 'ÕÅæºåû', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 16, 11, 3, 4, 'ĞÀ²©Ê«ÓîÖÇİ¡Îõºé»ÛåûÚÓ', '37744402569', '46680958053', '²©Ä¬¾ü½ÜĞ¡¼Î³½¼Î×ÓĞùĞù', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (271, '½ğ³½', '123456', 2, 'ÎâÄ¬Ãô', '1', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 24, 45, 5, 3, '¾êÕ¹ÖñÁéç÷¾¸ÑôÍÄÄ¬´«Á«', '85499508910', '96966744326', '²©Ğ¡İ¡Ïş¹Û´ºÎõç÷´ºÑô¹Û', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (281, 'Ñî¸Õ', '123456', 3, 'ÂÀ½¨ÏşÖê', '1', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 32, 24, 1, 4, 'ĞÀ´ºåû×Ó»Û²©ĞñÑÅ²©½ğÆ½', '93575486079', '48659897779', 'Ê«Ñô´«æÃ²©²©´«İæ²©·Éæº', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (291, 'Ë®ÚÓ', '123456', 2, '½ğ¾üÖñ', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 32, 12, 1, 3, 'Ê«ÈôÕ¹Óê½ğİ¡Ë¸ÓîĞÀ¾ê×Ó', '40560160488', '41435496971', 'ÖÇæº½Ü´ºÑï²©ĞñÎõºÆ³½Ê«', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (296, 'ÉòĞÀ', '123456', 1, 'º«ĞË', '1', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 24, 94, 3, 4, 'İ¡´ºÇçÇçĞ¡ĞñÍÄ²©ÍÄº­åû', '28192051223', '68217329377', 'æÃ´ºÃù³½ÍÄİæº­Ğñ´ºåûÑÅ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (301, '³ÂÑÅ', '123456', 2, 'ñ¼æº¸Õ', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 23, 64, 3, 4, 'ÎÄÖÇÑÅ»ÛĞ¡ÃúÊ«Õ¹º­ÑôÊ«', '97131073648', '34146695160', 'Ä¬Ñô¸ÕÎÄÎÄ¹ÛÎÄåûº¬ÈôÁ«', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (8, '½ğÓê', '123456', 2, 'ÀîÑôº£', '2', to_date('10-10-2019 19:50:00', 'dd-mm-yyyy hh24:mi:ss'), '0', 6, 84, 2, 2, 'Ïşº­İ¡¾ü·É¸ÕÎÄÁéÊ«ÑôÃù', '32127368617', '89438905515', 'ĞÀ·ÉÕ¹²©¾êĞËç÷º£ÑôºéÎÄ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (32, 'ÎºÄ¬', '123456', 3, 'ÀîÇçÃú', '1', to_date('10-10-2019 19:52:11', 'dd-mm-yyyy hh24:mi:ss'), '0', 14, 88, 5, 2, 'ÈôÃôåûÑôÈô¹Û³½ÖñÖÇ½¨Õ¹', '59114283944', '84748082885', 'ÖñºéĞÀĞËË¸ÑÅÑôÎÄº­Ä¬Æ¼', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (36, '³Â¾ü', '123456', 1, 'ÑîÕ¹', '1', to_date('11-10-2019 00:59:28', 'dd-mm-yyyy hh24:mi:ss'), '1', 21, 27, 2, 4, '³½Óî¾üĞÀĞÀ²©ÎÄÑô¾üÃùÇç', '55291197831', '25843952014', 'ÍÄÑôÍÄæº¾¸ÖÇÑô¼Îİæ´ºÑô', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (165, 'º«Ñô', '123456', 3, 'Ö£ºé½ğ', '2', to_date('11-10-2019 01:04:00', 'dd-mm-yyyy hh24:mi:ss'), '0', 19, 92, 5, 4, 'ĞñæèÎÄæºÎÄæÃÊ«Ê«¾êÁúĞñ', '23965589808', '24207819029', 'º­ÑÅÎÄ×Óæº´º³½½¨ÚÓÑôÍÄ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (175, 'ÖÜÃú', '123456', 3, 'Ç®³½', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 22, 11, 4, 2, 'Ê«º¬ĞÀ´º×Ó¾êÑÅÊ«Ê«æºÍÄ', '55517285695', '52884550458', 'º£Ãôº­ĞÀÊ«Ä¬Ïşºé¸ÕÊ«æº', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (180, '½ğÆ½', '123456', 3, '·ëåûÁ«', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 29, 39, 2, 2, '´ºÑïÖêåûİæÕ¹Ê«ÑôÁ«ÓîÎÄ', '92717559368', '06810170762', 'ÑÅÊ«½¨ÏşÎÄ¸ÕÍÄÃôåûÑï³½', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (185, 'Ç®ÎÄ', '123456', 2, 'Ç®ÓîÏş', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 30, 58, 4, 2, 'ÍÄº­ÎÄ·ÉæºĞÀ²©ÓêÓêæºÖê', '12492823078', '60397268357', 'ÎÄÑïÁ«Ñïº£º­¾êÑÅÑïæºÓê', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (197, 'ÍõÁ«', '123456', 2, 'ÂÀÑô·ÉÊ«', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 10, 87, 3, 2, 'æºĞùç÷½¨·ÉĞ¡¾¸âùĞ¡Ê«Ñï', '70620624805', '79049542729', 'Óî¸ÕÎÄÃùĞÀ¾üæº²©ÎÄ³½ç÷', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (202, 'ÕÔÎõ', '123456', 1, 'Ç®Ğùæº', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 22, 43, 1, 2, '¸ÕÕ¹½¨³½İææè´º·Éº­Ê«ÖÇ', '52742936647', '33396300105', 'ºÆº­Áéº£Ê«âùº£º­Ê«ÏşÕ¹', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (207, 'ÎºÑï', '123456', 3, 'Ö£ÎÄåû', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 19, 63, 2, 2, 'Ãúºé³½¼Î½¨ĞÀĞÀ½¨º­æÃĞÀ', '24951420699', '02424298735', 'º£Ïş×ÓÎÄÁúÖêæºæÃ´«åûĞù', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (230, '½¯Ñô', '123456', 3, 'Ê©âù', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 9, 62, 5, 4, '½ğÑôĞÀ¾¸æº½¨Ãúç÷¸ÕÃôÊ«', '79058115886', '25390347498', 'ÍÄÕ¹æºº­º£ÑôÑôº£ĞùÖêİæ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (277, 'ºÎæº', '123456', 1, '½¯ĞùÑô¾ü', '1', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 14, 83, 3, 4, 'ºÆ½¨º£Ê«º£Ê«º­ÍÄÁú½ğ½ğ', '76609727292', '04881976297', 'ÑïåûÑôË¸ÑôÁé´ºº­³½Á«Ê«', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (282, 'Ê©Æ½', '123456', 2, 'ÂÀ²©º­Õ¹', '1', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 18, 64, 4, 2, 'Ğ¡Ê«æºİæº­º­Õ¹´«Õ¹ÑÅÓê', '76186332043', '58570024855', '´º³½Æ¼ÇçæèºÆÕ¹ÓêºÆÆ¼Ê«', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (297, 'ñÒÖÇ', '123456', 1, 'Îâº¬³½³½', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 18, 47, 1, 4, 'ĞËĞÀæºĞÀÊ«ÃùÑïÑôÎõæÃĞñ', '75774199676', '17892286428', 'º­åûÎÄÑô´º³½Ë¸ÎõÏşÊ«Ïş', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (1, 'kailong', '123456', 1, 'ñû¿ªÁú', '2', to_date('08-10-2019', 'dd-mm-yyyy'), '1', 6, 26, 3, 2, '°¢ÈøµÂÈö', '7777', null, null, null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (3, 'ÍõÎå', '21421', 3, 'Èöµ©', '1', to_date('25-10-2019', 'dd-mm-yyyy'), '1', 6, 56, 2, 3, '°¡Êµ´òÊµ', '2132132', null, null, null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (4, '³Ââù', '123456', 1, 'Ë®ç÷', '2', to_date('10-10-2019 19:49:59', 'dd-mm-yyyy hh24:mi:ss'), '1', 32, 74, 5, 4, '½ğÏşÑï¸ÕÖÇİ¡½Ü½¨´«ºéÑô', '71311814809', '51863378224', 'ÇçĞñº­²©ÖñÑô²©º­Îõ¹Ûºé', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (9, 'Ëïº£', '123456', 1, 'Ë®Á«Áú', '1', to_date('10-10-2019 19:50:00', 'dd-mm-yyyy hh24:mi:ss'), '1', 13, 56, 2, 1, 'İ¡º£ÖêÓêº­º¬ĞÀåû½ÜºéĞÀ', '87319980344', '91106953560', 'ÖêĞ¡»Ûåû¸ÕâùÇçÃùÑôÑôÊ«', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (13, '°Øæº', '123456', 3, '½¯ĞÀÆ¼', '1', to_date('10-10-2019 19:50:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 28, 37, 3, 4, 'Ïş¾ê·ÉâùÎõÓîåûÓîº­½Ü¹Û', '05131653034', '18041160917', 'İ¡º¬Èôº¬´«ÖÇÎõ²©Ë¸ÎÄĞË', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (17, 'ÀîÑÅ', '123456', 1, 'ÎÀ³½³½²©', '2', to_date('10-10-2019 19:50:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 13, 82, 4, 2, '×Ó³½âùº­´ºâùË¸ÑÅÆ½Æ½Ê«', '33989718368', '99721541588', '²©Áú¾¸½¨³½ÖÇÓîº£ĞÀÕ¹ç÷', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (29, 'Ê©Ê«', '123456', 2, 'ÕÔºÆÍÄĞÀ', '2', to_date('10-10-2019 19:52:10', 'dd-mm-yyyy hh24:mi:ss'), '0', 14, 43, 3, 2, '´º´ºÄ¬ÓêÓîº­¹ÛÖÇåûæèÊ«', '39042646357', '35054776738', 'ÏşÑô½¨·ÉÁ«º­Ñôİ¡ÃúÑÅÁú', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (33, 'Ö£ĞË', '123456', 2, 'ÑîÊ«', '1', to_date('10-10-2019 19:52:11', 'dd-mm-yyyy hh24:mi:ss'), '0', 12, 36, 4, 1, '»ÛÏşÎÄ¾¸³½æÃæº»ÛÑïÁ«ç÷', '83770623980', '14005925123', 'Æ½º­ºÆÊ«¸Õ¾êĞ¡Ïşâù³½Öñ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (37, '½¯Ãô', '123456', 2, 'ÀîÑôİ¡Èô', '1', to_date('11-10-2019 00:59:28', 'dd-mm-yyyy hh24:mi:ss'), '1', 18, 61, 3, 1, 'º­Ë¸ÎÄĞÀÇç²©½ğ½¨Ïşº­Ñô', '72705720205', '88046038498', 'Ïş½¨ÁéÄ¬ÃôÏşÎõ´ºÖêĞË½¨', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (43, 'ÎÀ´«', '123456', 3, 'ÖÜÓêåûâù', '1', to_date('11-10-2019 00:59:29', 'dd-mm-yyyy hh24:mi:ss'), '1', 33, 29, 1, 3, 'Ñô×Ó²©º£ÁéÆ¼ÓêÑôº£ÓîÏş', '41321404282', '33309032329', '·É´ºÎõº¬Õ¹Ê«ÚÓæºĞÀÈôÊ«', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (166, 'º«Ñôñ¼æº', '123456', 2, 'Ö£ºé½ğÖ£ÓêÖÇ', '2', to_date('11-10-2019 01:04:00', 'dd-mm-yyyy hh24:mi:ss'), '1', 25, 31, 4, 2, 'ĞñæèÎÄæºÎÄæÃÊ«Ê«¾êÁúĞñ½¨ÓêºÆºéº­º­×Óº£Ñô×ÓÑô', '2396558980869815188600', '2420781902934808523495', 'º­ÑÅÎÄ×Óæº´º³½½¨ÚÓÑôÍÄÎÄº­ÑôºéÊ«ç÷ÑÅ´ºÏş³½³½', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (176, 'Ç®¾ü', '123456', 3, 'ñ¼Ë¸æº', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 19, 34, 3, 4, 'ÁúÃôÓê·ÉÓê³½Óî¹ÛË¸Ïş´º', '99022961149', '37802854993', 'Óêº¬ÏşÃôÎÄâùÓîÓîâùĞÀ·É', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (181, 'º«Ê«', '123456', 3, 'ÍõÍÄÆ½', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 20, 17, 5, 3, '¾¸ç÷Á«Ä¬Æ½ÓîÆ½ÖñÄ¬Õ¹Ë¸', '15387044025', '31284736302', 'Ë¸Ñôåûº­Æ¼İæÊ«Óîº£»ÛÑï', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (186, 'ÖÜÕ¹', '123456', 1, '³ÂÊ«ÚÓÊ«', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 12, 53, 3, 4, 'º­Ïş·ÉÁéÁéÇçÏş´º½Ü×ÓÑÅ', '61231477534', '20145446180', 'Ñô²©º£Öñ½¨ÎÄÊ«ĞÀÁúÊ«Îõ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (191, 'ºÎÍÄ', '123456', 1, '½¯ÑÅ', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 20, 96, 4, 2, 'ÑôİæÄ¬º¬º£ÓêÎÄÚÓÖñæºÖÇ', '27486355509', '37251985717', 'ÓêÁéÚÓÈôæºÏşÑÅÎõ´ºÚÓ¹Û', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (196, 'ÕÔÖê', '123456', 2, 'ÌÕĞËÖêºÆ', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 26, 32, 5, 2, 'ÃúÍÄç÷Ïşºé»Û¾üÓêÊ«Õ¹²©', '95740483364', '16416401764', 'ºéÈôæÃåûÚÓ¹ÛÏş´«åûÚÓÊ«', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (203, 'ñÒºé', '123456', 3, 'ñÒÃúÑÅ½¨', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 10, 3, 3, 2, '·Éº­Õ¹Ê«Ê«Ê«æº¼ÎĞùÁ«Ñô', '15129661371', '92766747873', 'Ê«½ğÄ¬ÑïÓê½¨ÇçæºåûÏş³½', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (208, 'º«¾ü', '123456', 1, '³ÂÏşÕ¹', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 10, 43, 5, 4, '´«åûÊ«Á«»Û¾¸ÏşÃú´ºĞù½¨', '12653965356', '58025920141', 'Á«²©ÎÄÑô²©ÑôĞÀÏş»Û¸Õ¼Î', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (213, '°ØË¸', '123456', 2, 'Ë®Õ¹º­', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 33, 62, 2, 4, 'Õ¹»ÛİæÊ«Ğù³½¾¸º­³½º­Ãú', '06119491192', '51671796190', 'Óêåû»ÛÊ«Õ¹Ä¬·ÉĞñÈôÑôĞù', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (218, 'º«Ïş', '123456', 2, 'ÉòÖêÏş', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 21, 50, 5, 4, 'Ğù³½ÃùæºÚÓ³½º£İ¡ĞËç÷³½', '27960885268', '77013722668', 'ÎõÊ«º­ºéÆ¼Æ¼Óê¾êĞËº­¾ü', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (226, '½ğ½¨', '123456', 2, 'ºÎç÷åû', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 32, 41, 5, 4, 'ç÷åû²©Æ¼İæåû´ºÃôÃùÖêİ¡', '88576118579', '23391325430', 'Õ¹İ¡ĞÀ³½ĞñæºÃùÃôÖÇº£Æ¼', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (231, 'ÂÀ²©', '123456', 3, '½¯Çç½ğ', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 31, 73, 2, 3, '²©Áú²©ç÷İæİ¡âùº¬ÏşĞ¡Á«', '84773670261', '34043490062', 'Ê«ÎÄæÃ´ºº­´º´ºæè¹ÛÈôÑï', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (241, 'Ç®Ê«', '123456', 2, 'Ë®ÎÄÃúÈô', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 28, 9, 2, 3, 'Óê¾¸ºÆĞÀÑÅÊ«¾êÆ¼ĞÀÏş³½', '52411454025', '42304624027', 'Óêº­Ğñ²©¾¸æè³½Ë¸Ñô¾¸¸Õ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (253, 'ñÒº£', '123456', 3, 'ñÒÆ¼Æ½', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 14, 85, 4, 4, 'Óî»ÛºÆÆ½Á«Ğù´«ÑôÓê·Éº­', '78383842765', '12383374651', 'Ê«´«İ¡Ñï´«»Ûº¬¸ÕÑô×ÓÓê', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (263, 'ÎâÊ«', '123456', 3, 'Ëï·É½¨', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 21, 84, 2, 3, 'Õ¹ÍÄĞÀÑôÖñÏşÑôºÆÑïº­Ê«', '80879229474', '95691321857', 'ÈôÎÄÎÄÓîÏşÑÅ¹ÛĞ¡½ğÏşĞ¡', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (278, 'ºÎÆ½', '123456', 3, 'º«Ïş', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 13, 23, 1, 4, '³½Ë¸½ÜÏşº­åûÓîÍÄÁ«º£Ê«', '00618863629', '28841550582', 'ÑÅºé´ºæè³½æèº­Æ¼Ê«Ğ¡Ãô', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (283, 'Ñî¾¸', '123456', 1, 'ÕÂ·É', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 14, 56, 1, 3, 'ĞË¼Î¾¸¾êÖñæÃÑÅĞË¹ÛÃùæº', '86166335966', '05642347761', 'Áúæº³½ÇçæºåûÁúº­ÓêĞñÕ¹', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (298, 'Àî½¨', '123456', 3, '½ğº­´ºĞñ', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 21, 54, 4, 2, 'º£ÓîÎÄ¾¸Á«ÓêºéÊ«¾ê¼ÎÁé', '90371905447', '47711443662', 'Ê«İæåûÆ¼½ğæèÍÄº£Ê«ÏşÃú', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (303, '°ØÄ¬', '123456', 3, 'ÌÕ²©Õ¹', '1', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 31, 96, 1, 2, 'º£İ¡Ë¸ÏşºÆº­·ÉÇçÑôĞùº£', '24656953030', '77238404755', 'ÏşÓîÃú¸Õåû½ÜæÃÆ½¾¸åû¾ü', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (5, 'ÎÀÏş', '123456', 3, 'Ë®Õ¹Öê', '1', to_date('10-10-2019 19:50:00', 'dd-mm-yyyy hh24:mi:ss'), '0', 3, 5, 4, 3, 'æºÊ«Óê·É½¨Ê«ÑïåûºéÕ¹ÎÄ', '09647123506', '34177071695', 'ç÷º¬Óî½¨Ğñº­ĞùĞ¡¼ÎĞËÁé', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (10, 'ËïÊ«', '123456', 3, 'Ë®ÎÄÖÇ', '2', to_date('10-10-2019 19:50:00', 'dd-mm-yyyy hh24:mi:ss'), '0', 28, 34, 3, 3, 'Ğ¡ÓêÑÅÓêĞùº­Ê«ÑôÇçåûç÷', '84667277413', '09481463633', '½¨²©ÖñÊ«ÚÓÑô´«º£Ñô³½ÖÇ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (18, 'Ëïåû', '123456', 1, 'ÖÜÕ¹»Û', '1', to_date('10-10-2019 19:50:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 12, 39, 3, 2, '´«Ñô³½åûÆ¼Ê«¾ê²©Ä¬ÑôÖÇ', '05241965082', '43968864843', 'Ãùç÷×ÓÎõ½ğÖÇĞ¡ºÆÑïĞÀ³½', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (20, 'ÕÂÊ«', '123456', 3, 'ÉòÕ¹', '2', to_date('10-10-2019 19:51:09', 'dd-mm-yyyy hh24:mi:ss'), '1', 32, 53, 1, 3, '·É´ººÆ³½½ğÑôÊ«º¬ÑÅ¼Îº¬', '65001188685', '49615677931', 'ÚÓÃô»ÛÓê²©º­ÑôåûÃúÖÇÕ¹', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (26, 'Îºåû', '123456', 2, 'Éò¾ê', '1', to_date('10-10-2019 19:51:09', 'dd-mm-yyyy hh24:mi:ss'), '0', 33, 97, 2, 3, 'İ¡º­ÖñÏşÏş·ÉĞË¾¸ÃúÆ½·É', '35720031139', '93624662884', 'Ïş½ğæº¾êÖê¾üÁú²©·É²©æÃ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (28, 'º«Õ¹', '123456', 2, 'ÂÀÑÅ', '2', to_date('10-10-2019 19:52:10', 'dd-mm-yyyy hh24:mi:ss'), '0', 21, 76, 4, 1, 'ÑïÓêÄ¬ĞËåûÑôº­×Óº£ÍÄĞñ', '18643252516', '64734467966', 'ÎÄĞËÖñ½¨Õ¹³½½ÜÑÅÆ½³½º­', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (34, 'ºÎÊ«', '123456', 1, '·ëº£ºé', '2', to_date('10-10-2019 19:52:11', 'dd-mm-yyyy hh24:mi:ss'), '1', 7, 80, 4, 1, '½¨·ÉÑô²©æº½¨º¬ÖÇ¹ÛÑÅÁé', '91424689590', '07590600274', 'º­½¨º­³½½¨¹Û×Óæè´«³½ç÷', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (38, 'Îâ¾¸', '123456', 1, 'ÍõÖñ´«', '1', to_date('11-10-2019 00:59:28', 'dd-mm-yyyy hh24:mi:ss'), '1', 26, 45, 5, 3, 'Æ½´º½¨ĞÀÕ¹ÑôºéÓêÁ«ÑôÑô', '12086324998', '18306789480', 'ÃùæèÃú¸ÕÈôÑôÈôİæÊ«ºÆº¬', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (39, 'Íõ²©', '123456', 3, 'º«·É', '2', to_date('11-10-2019 00:59:28', 'dd-mm-yyyy hh24:mi:ss'), '1', 7, 60, 4, 4, 'ĞùÕ¹ºÆº¬æºæè¾êÍÄÁéĞÀÎÄ', '38761484006', '87595929984', 'ÁúÓêÑôĞËÄ¬·É¾¸½¨¸Õ×Óºé', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (168, 'Éò²©', '123456', 2, 'Àî¼ÎÖÇ', '1', to_date('11-10-2019 01:05:33', 'dd-mm-yyyy hh24:mi:ss'), '0', 16, 29, 5, 3, 'ÎÄ³½´«æº¹Û¸ÕÏşÊ«²©ÑÅĞÀ', '05293455163', '47110837378', 'ĞñİæĞÀ¾üÕ¹Çç×ÓÊ«İæÆ½¾¸', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (169, '°ØÊ«', '123456', 1, 'ÕÂİæİ¡', '1', to_date('11-10-2019 01:05:33', 'dd-mm-yyyy hh24:mi:ss'), '0', 24, 24, 4, 4, 'Îõ»ÛÎõÑô¹ÛÑÅºéåû¸ÕĞ¡¾ü', '04542640939', '06415503694', 'ÇçÓêåûº¬âùÇçĞ¡×Ó¹Û»Ûåû', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (171, 'ÍõÇç', '123456', 3, 'ÕÔç÷ĞÀÆ½', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 13, 82, 2, 4, 'ÏşĞÀĞÀ´«º­Õ¹ÑïÏşÎõÕ¹Ãù', '18708978484', '77246895949', '²©º¬Õ¹ĞñÏşÑôº­Ñô»ÛĞÀº£', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (172, 'ÑîÍÄ', '123456', 3, 'ñ¼æºÕ¹', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 8, 72, 1, 2, 'åûÑô´«ÖñĞ¡¸Õ³½»ÛÎõæÃÑï', '57987366589', '83531998713', 'Ê«½¨¾êº­Ñï¾¸ÎÄºéº­¾üº­', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (182, 'ÕÔ½ğ', '123456', 2, 'ñ¼¹Û', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 9, 36, 2, 2, 'ÖÇº£ÑÅĞÀÓîº­Ğñ×ÓÏş·Éæº', '46925250320', '71333926520', 'Õ¹·ÉÖñ¾êË¸Ğ¡ÎÄ´ºÄ¬ÑôÁú', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (187, 'Ö£åû', '123456', 2, 'Ë®·ÉÊ«æÃ', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 25, 19, 1, 2, 'º£Áé´ºÑôÊ«×Óº­´ºÁ«¾êæè', '62502387037', '69207337995', '¹ÛæÃÖê»Û¸Õ·ÉåûÄ¬ÏşÁé½ğ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (192, 'Ö£Ê«', '123456', 2, 'ÖÜÕ¹Ë¸³½', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 18, 75, 4, 4, 'º­´º¼ÎÍÄæº½¨Õ¹ºÆÕ¹Æ½İæ', '86531393698', '04311686593', 'ÏşºÆ·ÉÁ«Æ¼Ê«¹ÛÎÄÇçÕ¹º¬', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (198, 'ÕÂÕ¹', '123456', 2, '½ğÖêæºĞÀ', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 1, 13, 1, 3, '¾ê´ºÎÄÎÄĞñÎÄĞ¡ÚÓÆ¼Æ¼·É', '09453733861', '52953105691', '¹Û·Éº­ÎÄºéĞÀ³½º­Ä¬ºÆÃú', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (199, 'Ç®ç÷', '123456', 2, 'ÉòÑôÊ«', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 16, 58, 3, 2, 'İæÕ¹æº¾ü¾üÁúÆ¼´º²©º­ĞÀ', '65965752610', '62826536512', '¸Õ¾ê¾üç÷Ñôº£ÖñÁúæèÄ¬Ğ¡', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (204, 'ÕÂ²©', '123456', 3, 'Íõåûæè', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 33, 83, 4, 4, 'º­ÎÄÁú´ºÑï¾ü¾êÊ«º­¾¸³½', '41441272294', '80731974439', 'Ê«º¬ÑôÑôÃùÎÄÆ¼Ê«·ÉÏşÃù', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (209, 'ÀîÏş', '123456', 1, 'ÎºÍÄ', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 34, 17, 4, 2, 'ç÷º£ÎÄÁúİæ³½âùÕ¹»Ûİ¡ÚÓ', '25240103029', '97517183874', 'ÑÅæÃ³½Ñô¼ÎºéÃô·É¼Îæºç÷', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (214, '½¯ÖÇ', '123456', 2, 'ÎÀÃú', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 28, 7, 2, 2, 'º­ĞÀÊ«æºÃô²©Óîº­ÍÄÏşÄ¬', '91255433946', '02758474664', 'Öê¹Û³½İæ´ºº­º­æÃÑôÖñÑô', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (219, 'ÑîÏş', '123456', 3, '½ªĞ¡', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 18, 75, 1, 2, 'âù´º¾¸ÁéÊ«ÎÄº£ÃùÖñ¾ü´º', '23799615257', '09710765476', 'ÑÅÇçÆ½ºéåûÆ½´«ĞùÎõç÷Ä¬', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (222, 'Ç®ÖÇ', '123456', 3, 'ÕÔ·É', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 19, 35, 4, 3, 'Ñôåû½ÜºéĞÀÎÄ´«¾êÓêÖêæº', '75438798381', '11999577485', '¹ÛÎõ¹ÛĞñºéĞ¡Õ¹³½º­ĞÀ¸Õ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (227, 'ÍõÑÅ', '123456', 2, 'Ê©Ñô', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 23, 62, 1, 2, 'ÏşÍÄÃúĞÀÓê¸Õæºº­ÖñÁéº£', '31114369329', '37518029012', 'º£ÓîÑôÍÄº­Óîº£´«ÎÄÃúºÆ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (232, 'ñ¼¾ü', '123456', 2, 'Îâ¾üÁéæº', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 25, 2, 3, 3, 'Ãú½ğÑôÑôĞùæÃÊ«ÍÄ´ºÖêÓê', '36575786239', '46940100467', 'ÓêÊ«Öê¸ÕÃúÖÇåû½¨åûĞÀĞÀ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (237, '½ªÎÄ', '123456', 2, 'ÍõÖñ', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 9, 63, 4, 1, 'Óê³½½ğ×Óâù×ÓÖñåûÈôºéÍÄ', '37471678385', '41730301678', 'ÈôÁ«Ğù´ºº£ÏşÖÇÁ«æè¼Î´«', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (242, 'ÕÔĞñ', '123456', 3, 'ÍõÃô', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 10, 38, 5, 2, 'Ê«Ä¬æº²©ÑôÖê½Ü½¨İæÓêÁ«', '51680336813', '64198280307', 'ÏşÆ¼æºĞÀ½ğâùæº´ºÎÄç÷æº', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (243, 'ÕÅ¾ê', '123456', 2, 'ÑîĞ¡Ãô', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 14, 95, 3, 4, 'åûÃù·ÉÄ¬º­½¨¾êİæÍÄ²©Óî', '51264499163', '99669652676', 'Ãô¾¸Óê¼Îç÷ÓîÁúÑô·ÉÖñ´º', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (244, 'Ëï¼Î', '123456', 3, 'ÕÅ¾¸', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 27, 38, 5, 1, 'ĞËÖêÑôº­ĞÀ½ÜÑÅ½ÜæÃİæÃú', '40102476809', '55954025378', 'Ê«Öêİ¡åûÈôĞË½¨Ğñ¾¸æº¼Î', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (249, 'Îâ×Ó', '123456', 3, 'ÎÀĞùİ¡', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 3, 51, 1, 2, 'Æ¼º¬ÎÄÍÄ´ºÎÄæººé´ºÃôÑï', '33447689345', '64452646050', 'ºÆº£Æ½Á«Ê«»ÛÓêÊ«Ñôç÷ÑÅ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (254, 'ÎºĞÀ', '123456', 3, 'º«Îõ¼Î', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 12, 33, 5, 2, '´ºÕ¹³½·ÉĞÀÃùÑôÃúÁ«Öñ¾ê', '35829443576', '51464419016', 'ĞùÖêÈôÏş¾¸ÏşÑÅæÃ³½Ê«·É', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (259, 'ÖÜÏş', '123456', 2, 'ÉòÃôºÆÇç', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 3, 49, 2, 3, 'º£»ÛÖêĞÀ½¨¾êÃúĞÀåûº­Ãú', '21822452546', '88073446776', 'ÖÇÓêåûº­·Éç÷ĞÀÖÇÖêÓî´«', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (269, 'Ë®Æ¼', '123456', 1, 'ÕÅ¼Î', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 10, 5, 5, 4, 'ºÆ´«ĞÀÚÓ¸ÕºÆÑÅ»ÛºéĞ¡º­', '13679056924', '51037835276', 'ÏşÓêÁéÎõ´ºç÷³½ÑôæºÊ«¹Û', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (274, '°ØÑï', '123456', 3, 'º«º­»ÛæÃ', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 7, 72, 5, 3, 'âùÑô¸Õ½¨âùĞù¼ÎÊ«º­ÑÅÁ«', '30679513251', '38056647005', 'ĞñæºÚÓÑôÏşÊ«Ä¬ÑôÃôÊ«Ñô', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (279, 'Ë®º­', '123456', 2, 'º«¹ÛÃù', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 17, 39, 4, 3, 'Ñôåûº­ÑôæºÏş¸Õİæ½ğĞÀ´«', '05140444648', '28676027007', '²©º¬ÁéÄ¬½¨º­ÎÄæÃÖê²©´º', null);
+commit;
+prompt 100 records committed...
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (284, '½ğÏş', '123456', 3, '½ğÏşÑôÊ«', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 16, 90, 1, 1, 'Æ¼·ÉÓê³½ÑôÁ«Ê«ÓêİæÃúåû', '71401874634', '88511333591', 'º­æèåû½Ü´ºº­Æ¼Îõ½¨º£³½', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (288, '·ëâù', '123456', 1, 'º«ĞÀ¾ê', '1', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 20, 20, 5, 4, 'İæ×ÓÚÓÊ«Ïşº­ÑôÚÓÁúÕ¹âù', '02374228837', '63037726822', 'æº²©¹ÛæèâùÎõİ¡Ãú×ÓÖñº­', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (289, 'ÑîÊ«', '123456', 1, 'ÎÀÖÇ', '1', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 12, 25, 2, 3, 'Öñ¾ê¾¸Ê«Ïşç÷º£³½ÎÄÎÄÈô', '82388891102', '85088564333', 'ÑôÚÓº­º¬¾¸æèÃùâùº£½¨ÎÄ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (299, 'Îº³½', '123456', 3, 'ÂÀºé»Û', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 3, 18, 5, 1, '»ÛÆ½º£Õ¹ÈôÖñ·É·ÉÓîº­¾ü', '62627502596', '14106709548', 'âùÕ¹Îõ²©Çç³½º­º£³½½¨Ãô', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (305, 'auto-create-Patient1', '123456', 3, 'ñû·½»ÆÁúÍõ', '2', to_date('11-10-2019 22:41:31', 'dd-mm-yyyy hh24:mi:ss'), '1', 13, 12, 4, 3, 'ÌÒÔ´Â·51ºÅ', '18807719226', null, null, null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (6, '·ëÖê', '123456', 3, '½ğÊ«æºÎÄ', '2', to_date('10-10-2019 19:50:00', 'dd-mm-yyyy hh24:mi:ss'), '0', 32, 47, 4, 3, '³½ÍÄĞù·Éæº´«Æ½³½Ïş¾ê¼Î', '66287952352', '92875729131', 'ĞÀÎÄĞÀÑôº£ĞñÑôÕ¹ºé·É·É', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (14, 'ñÒ¾ü', '123456', 3, 'ÂÀ³½', '1', to_date('10-10-2019 19:50:41', 'dd-mm-yyyy hh24:mi:ss'), '0', 30, 10, 2, 4, 'Ççº­ÚÓÎÄ½¨ÑôÊ«º­»Ûº­İ¡', '85699126030', '18107436813', '²©ÍÄÍÄĞùÏşÆ½³½İ¡Æ¼ºÆ´º', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (19, 'ÌÕæº', '123456', 3, 'º«·É¾ê', '2', to_date('10-10-2019 19:50:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 34, 15, 4, 3, 'Ê«åû²©ºÆÎÄºÆÏşÕ¹Õ¹Ê«Ïş', '58163829944', '68010445995', 'ÑÅº­½ÜÖÇÑï²©Õ¹Ê«º­ÏşÕ¹', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (22, 'ÖÜÑï', '123456', 1, 'ÎºÈôÁúÊ«', '2', to_date('10-10-2019 19:51:09', 'dd-mm-yyyy hh24:mi:ss'), '0', 8, 89, 3, 2, 'åûÃùâù¼Î½Ü×Óº£ÑÅº£º£ºé', '95704180326', '02057024617', 'ºÆÏşÑô½¨ĞñÖêÄ¬ÑôÍÄĞù´º', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (27, 'ÀîÁú', '123456', 1, 'º«âù½¨ÚÓ', '2', to_date('10-10-2019 19:51:09', 'dd-mm-yyyy hh24:mi:ss'), '0', 11, 100, 5, 1, 'Ñô·ÉÖñİæ½Üº­åûº­º­¾êÁú', '89814079394', '84593131729', '½ğæºÏşÊ«Ãù²©ÈôÇçĞÀæèæº', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (30, 'ÖÜÈô', '123456', 1, '°ØÑôÊ«', '2', to_date('10-10-2019 19:52:11', 'dd-mm-yyyy hh24:mi:ss'), '0', 9, 19, 3, 1, 'ÎÄ¸Õº­Ä¬½¨¸ÕÑÅÏşĞÀÊ«Óê', '43423030493', '87574295399', 'Æ¼»Û´«ÍÄÁúæèÓêåûÃúâùº£', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (35, 'ËïÎÄ', '123456', 2, 'º«³½Ë¸æº', '1', to_date('10-10-2019 19:52:11', 'dd-mm-yyyy hh24:mi:ss'), '1', 11, 94, 4, 4, 'ç÷ĞÀ¹Û¾ê³½Æ½»ÛÕ¹İ¡ÑÅ³½', '14285889643', '29971607010', 'ÎÄæºÖÇÁéÏşÕ¹·É½¨ÃúÕ¹¸Õ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (40, 'Ê©Óî', '123456', 3, '½ğ²©', '2', to_date('11-10-2019 00:59:28', 'dd-mm-yyyy hh24:mi:ss'), '1', 26, 58, 5, 3, 'Áú½ğåûÖê´«º­İæ¹ÛÚÓ»ÛÑô', '88754782980', '33079937135', 'Ë¸æºĞùÖñæº¾ü¼ÎİæÆ¼ÍÄº£', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (170, 'ÎâÎÄ', '123456', 3, 'ºÎ·É', '1', to_date('11-10-2019 01:05:33', 'dd-mm-yyyy hh24:mi:ss'), '0', 4, 67, 1, 2, 'âùÑô´ºÑôº£ÓêÚÓº­ÑÅÁéĞÀ', '40107853772', '27508647281', '²©İ¡ĞÀÈôÊ«º­²©ÑôÓêÑÅ¸Õ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (173, 'ÕÂÑô', '123456', 2, 'ñ¼Îõºé', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 8, 20, 4, 2, 'ÑôĞÀº¬ÃúÊ«ÈôÆ¼²©Õ¹º¬Á«', '72730982402', '73521572345', 'º£Óîº­Ïş¹Û¾ü·ÉĞ¡Óîº­æÃ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (178, 'ºÎÓî', '123456', 3, 'ºÎº­¸ÕĞù', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 24, 2, 1, 3, 'Õ¹ÓêÑôÍÄº­¹Û½ğº­æÃÑïÊ«', '41241536273', '86679228578', 'Õ¹ÓêÇçĞËÑô½¨Èô×Óİ¡º­Óê', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (183, 'ÕÂÍÄ', '123456', 3, '³ÂæÃ', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 29, 53, 1, 1, '²©ÍÄ¹ÛÏşç÷¹ÛÑÅ»ÛåûÖñº­', '51489094293', '28918578457', 'Ñô·Éâù½¨ĞÀÊ«åûÁ«ÁúÆ½ÎÄ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (188, '½ª´º', '123456', 1, '½ğ¼Îº£ÑÅ', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 14, 97, 1, 1, 'ĞùÍÄåûÑô×ÓÊ«ĞËĞñÎÄº­ÍÄ', '36909309448', '27501640981', 'ÑôÆ½¹ÛåûÓêÑÅ³½ÑôÄ¬Ê«³½', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (193, '½ğÆ¼', '123456', 2, 'Ê©ÍÄ', '2', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 26, 67, 2, 3, 'Ê«æèÁú½ÜÑÅ´ººé¼Î¼Îåûâù', '99334678059', '68610579719', 'ÑôÑô¾ê½ÜæºåûÑôĞÀÓêİ¡º­', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (200, '·ë´«', '123456', 1, '°ØÃúĞñ´«', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 12, 78, 2, 2, '·ÉÑÅ´º¸ÕæÃ´«Óî½ğ½ÜæèÏş', '47430007351', '41104394560', '¸ÕÑïĞñÈôæºÊ«º£ÑôÎÄ¾ê³½', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (205, 'ÍõĞ¡', '123456', 1, '½ªÃú»ÛÑô', '1', to_date('11-10-2019 01:05:41', 'dd-mm-yyyy hh24:mi:ss'), '1', 34, 47, 5, 4, '³½İæÏşÑïİæºÆÃôĞÀÎõ½¨Ğñ', '73000593392', '41599131711', 'Ñô¹Û¾ê¾¸Ä¬Ğ¡Ğñ½¨æºÏşÑÅ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (210, 'ÌÕÖñ', '123456', 2, 'Àî²©', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 11, 32, 5, 1, '½ğÎÄ²©ÃôË¸ÍÄË¸³½ÑôÎÄº£', '03320548618', '24462914684', 'ÏşÎõÃúÚÓĞùĞ¡Ê«Õ¹Ñôº­¸Õ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (215, 'Ë®Õ¹', '123456', 3, 'ñÒ½ÜÓêÑÅ', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 12, 42, 4, 2, 'ÑôºéåûæÃÈô½¨ÇçÓî¼Î¹ÛÆ½', '80802173025', '94352026786', 'º­½Ü·ÉÈôÓê·ÉÖñÏşÁé¹Û×Ó', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (220, 'ÌÕæè', '123456', 2, 'ñ¼º£', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 29, 99, 4, 2, 'ÎÄÊ«²©ÎÄâùåûĞÀÄ¬³½ºé´«', '75291978030', '19185434861', 'ºéÎÄº¬ĞñÑÅ´ººÆ¾êİ¡ÑÅÆ¼', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (223, 'Ê©Ãú', '123456', 2, 'º«Ë¸º­Ê«', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 4, 92, 5, 1, 'Áú´«ÎÄÑïÆ½ÏşÖÇâùº£¼ÎÕ¹', '44952036206', '12675041519', '·É³½Ñô³½Ê«Æ½´º½ÜÃôº­Ïş', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (228, 'ñ¼º­', '123456', 1, 'ÍõĞùÖñ', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 5, 73, 2, 3, 'ÑôÑôÊ«Ä¬ºéÎõÎÄåûæÃÁéÓî', '39525855080', '11150627507', 'æÃÕ¹Ê«ÚÓÑÅÆ¼ÚÓ·Éæº²©Õ¹', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (233, 'Àî´º', '123456', 2, 'Ö£³½×Ó', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 12, 87, 4, 3, 'Èôº­Æ¼Ê«º­º­ÍÄ¸ÕÎÄÊ«Áé', '23053807562', '88502755559', 'º­¹ÛÕ¹Ä¬´ºÊ«Ğ¡º£ÈôÍÄĞÀ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (238, 'ÌÕÎÄ', '123456', 1, 'ÌÕÊ«ÖÇ', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 15, 73, 1, 1, '¾¸²©Ë¸»Ûç÷İæÑôæèÑÅĞËÓê', '56952771184', '56865276130', 'Ñï½Üİ¡¹Û¾êÈôÄ¬½¨åûĞÀ¾¸', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (245, '³ÂÎÄ', '123456', 3, 'Íõ¾¸', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 6, 53, 3, 3, 'º­İ¡ÍÄ¹ÛÖêĞÀĞñÑô³½¾üÑô', '81840804440', '27107323313', 'ÑÅ½ğÓêĞñ·ÉÆ½ĞÀÚÓ¸ÕÃùæÃ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (250, 'ñÒĞù', '123456', 1, 'ÑîÊ«', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 3, 33, 5, 2, 'ĞñÍÄºÆÁ«¾êÃùºÆº­ĞËÆ½Ñô', '75319243969', '10818019409', '³½Óê²©ç÷ÑôÏşÍÄÆ¼º­Ñô´«', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (255, '·ë·É', '123456', 3, '½ğ²©Á«', '2', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '1', 34, 89, 4, 2, 'Ê«ÓîÑôº­ÚÓº£İæĞÀÖÇ´«ÎÄ', '87791949213', '01130195264', 'º¬º­ÎÄ³½ºéÑôÕ¹İæĞñ·É½Ü', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (260, 'ÎºÃú', '123456', 2, 'Ë®Õ¹³½', '1', to_date('11-10-2019 01:05:42', 'dd-mm-yyyy hh24:mi:ss'), '0', 26, 5, 4, 3, 'Ê«½ğ³½âùº­¹ÛÎõç÷æÃÓî¹Û', '26073176171', '39523549800', '¼Î³½º¬åûÏşİæÈôæèÁéÓîÎõ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (265, 'Ê©´º', '123456', 1, 'ñ¼ÚÓ', '1', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 8, 87, 4, 2, '²©ÑÅ³½¾üÎõ¹ÛĞñæºÑôÚÓÃú', '20662595570', '45033611912', 'ºÆÄ¬Ğ¡²©ºÆ¼ÎºÆÚÓ¸Õç÷Á«', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (270, '·ëİ¡', '123456', 1, 'Íõæèİ¡', '1', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 31, 64, 4, 2, 'ÖñÏşÊ«Ê«ĞñĞ¡ÇçÎõÑôÖñÑÅ', '04546541210', '32048587581', '¹ÛÊ«åûÏşĞËºÆÑÅĞÀÏş½Ü³½', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (275, 'ÕÂ³½', '123456', 1, 'ÌÕ½¨Ê«Õ¹', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 22, 22, 4, 2, 'æÃÊ«ĞÀºéÖÇÊ«Ñôåû¾êÁú×Ó', '81665109553', '79151662774', '´«ÑÅÓîÑïÃôâù½ğÑïĞËÕ¹Æ¼', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (280, 'Ëï´º', '123456', 1, 'Ëï½¨Ê«Ğù', '1', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 3, 58, 1, 2, 'Ñôç÷¹ÛÆ¼ĞÀ²©ÑôĞÀ½ğ½Ü²©', '20728473756', '74663916197', '·É³½Ê«ÖñÕ¹ÑôĞÀº£Á«ĞËÊ«', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (285, 'ÕÅâù', '123456', 2, '½ª´«', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '1', 27, 13, 3, 2, '¹ÛÓêç÷Ñôº­²©¼Î¸ÕÎÄÎÄÇç', '20350880725', '82445655712', '´«ĞùÍÄÓêº£ÁúÏş³½³½²©ÖÇ', null);
+insert into LOL_USER (id, username, password, rule, realname, sex, registertime, status, pid, age, cultureid, religionid, address, phone, email, content, imagepath)
+values (290, 'Ç®·É', '123456', 1, 'Ñî²©', '2', to_date('11-10-2019 01:05:43', 'dd-mm-yyyy hh24:mi:ss'), '0', 34, 76, 2, 4, 'ÎÄÃùÑôÊ«º­åûÓîÓîÑôÃùÑô', '21505825321', '49622666505', 'ÚÓÖñæèâùº­ÑôÊ«Ñô½ÜÖñ×Ó', null);
+commit;
+prompt 138 records loaded
+prompt Loading LOL_WARM...
+insert into LOL_WARM (id, content)
+values (0, 'Òì³£');
+insert into LOL_WARM (id, content)
+values (1, 'Õı³£');
+commit;
+prompt 2 records loaded
+prompt Loading LOL_DATAMANAGER...
+insert into LOL_DATAMANAGER (id, username, testtype, testdate, warmtype)
+values (2, 'ÍõÎå', 1, to_date('16-10-2019', 'dd-mm-yyyy'), 1);
+commit;
+prompt 1 records loaded
+prompt Loading LOL_FRIENDCONNECT...
+prompt Table is empty
+prompt Loading LOL_MEDICAL...
+insert into LOL_MEDICAL (id, username, hypersensitivity, hypersensitivitystatus, hallucination, hallucinationstatus, running_thought, running_thoughtstatus, delayed_thinking, delayed_thinkingstatus, high_spirits, high_spiritsstatus, irritable, irritablestatus, enhanced_will, enhanced_willstatus, self_injury, self_injurystatus, mental_retardation, mental_retardationstatus, diet, dietstatus, sleep, sleepstatus, impotence, impotencestatus, sexual_orientation, sexual_orientationstatus, personality_disorder, personality_disorderstatus, hyposexuality, hyposexualitystatus, medical_info, warmtype, testtime, testtype)
+values (4, 'kailong', '¸Ğ¾õ¹ıÃô', '0', '»Ã¾õ', '0', 'Ë¼Î¬±¼Òİ', '0', 'Ë¼Î¬³Ù»º', '0', 'ÇéĞ÷¸ßÕÇ', '0', 'Ò×¼¤Å­', '0', 'ÒâÖ¾ÔöÇ¿', '0', '×ÔÉË', '0', '¾«Éñ·¢Óı³Ù»º', '0', 'ÒûÊ³', '0', 'Ë¯Ãß', '0', 'Ñôğô', '0', 'ĞÔÖ¸Ïò', '0', 'ÈË¸ñÕÏ°­', '0', 'ĞÔÓû¼õÍË', '0', 'ÄãÃ»ÊÂµÄ', 0, to_date('13-10-2019 23:27:03', 'dd-mm-yyyy hh24:mi:ss'), 3);
+commit;
+prompt 1 records loaded
+prompt Loading LOL_WEBINFOMANAGE...
+insert into LOL_WEBINFOMANAGE (id, module, title, imagepath, uploadtime, content)
+values (1, '°¢ÈøµÂ', '°¢ÈøµÂ', 'Èö', to_date('09-10-2019', 'dd-mm-yyyy'), '°¡ÈøË¹');
+commit;
+prompt 1 records loaded
+prompt Enabling foreign key constraints for LOL_USER...
+alter table LOL_USER enable constraint LOL_USER_CULTUREID_FK;
+alter table LOL_USER enable constraint LOL_USER_PROVINCEID_FK;
+alter table LOL_USER enable constraint LOL_USER_RELIGIONID_FK;
+alter table LOL_USER enable constraint LOL_USER_RULE_FK;
+prompt Enabling foreign key constraints for LOL_DATAMANAGER...
+alter table LOL_DATAMANAGER enable constraint LOL_DATAMANAGER_TESTTYPE_FK;
+alter table LOL_DATAMANAGER enable constraint LOL_DATAMANAGER_USERNAME_FK;
+alter table LOL_DATAMANAGER enable constraint LOL_DATAMANAGER_WARMTYPE_FK;
+prompt Enabling foreign key constraints for LOL_FRIENDCONNECT...
+alter table LOL_FRIENDCONNECT enable constraint LOL_FRIENDCONNECT_URLNAME_FK;
+prompt Enabling foreign key constraints for LOL_MEDICAL...
+alter table LOL_MEDICAL enable constraint LOL_MEDICAL_TESTTYPE_PK;
+alter table LOL_MEDICAL enable constraint LOL_MEDICAL_WARMTYPE_PK;
+prompt Enabling triggers for LOL_CULTURE...
+alter table LOL_CULTURE enable all triggers;
+prompt Enabling triggers for LOL_TESTTYPE...
+alter table LOL_TESTTYPE enable all triggers;
+prompt Enabling triggers for TAB_PROVINCE...
+alter table TAB_PROVINCE enable all triggers;
+prompt Enabling triggers for LOL_RELIGION...
+alter table LOL_RELIGION enable all triggers;
+prompt Enabling triggers for LOL_RULE...
+alter table LOL_RULE enable all triggers;
+prompt Enabling triggers for LOL_USER...
+alter table LOL_USER enable all triggers;
+prompt Enabling triggers for LOL_WARM...
+alter table LOL_WARM enable all triggers;
+prompt Enabling triggers for LOL_DATAMANAGER...
+alter table LOL_DATAMANAGER enable all triggers;
+prompt Enabling triggers for LOL_FRIENDCONNECT...
+alter table LOL_FRIENDCONNECT enable all triggers;
+prompt Enabling triggers for LOL_MEDICAL...
+alter table LOL_MEDICAL enable all triggers;
+prompt Enabling triggers for LOL_WEBINFOMANAGE...
+alter table LOL_WEBINFOMANAGE enable all triggers;
+set feedback on
+set define on
+prompt Done.
